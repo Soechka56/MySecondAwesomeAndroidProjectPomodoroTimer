@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="pomodoro_background">#FFFFF9F0</color>
+    <color name="pomodoro_surface">#FFFFFFFF</color>
+    <color name="pomodoro_outline">#FF171717</color>
+    <color name="pomodoro_text_primary">#FF171717</color>
+    <color name="pomodoro_text_secondary">#FF5F5A67</color>
+</resources>
