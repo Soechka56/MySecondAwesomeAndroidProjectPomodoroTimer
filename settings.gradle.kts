@@ -27,3 +27,10 @@ dependencyResolutionManagement {
 rootProject.name = "MySecondAwesomeAndroidProjectPomodoroTimer"
 include(":app")
 include(":core:designsystem")
+include(":feature")
+include(":feature:auth")
+include(":feature:auth:api")
+include(":feature:auth:impl")
+include(":core:domain")
+include(":core:data")
+include(":core:network")
