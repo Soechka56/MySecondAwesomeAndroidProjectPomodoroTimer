@@ -9,6 +9,9 @@ android {
 
 dependencies {
     implementation(project(":core:designsystem"))
+    implementation(project(":core:di"))
+    implementation(project(":feature:auth:api"))
+    implementation(project(":feature:auth:impl"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
