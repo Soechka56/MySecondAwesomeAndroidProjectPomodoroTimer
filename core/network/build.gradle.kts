@@ -7,6 +7,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.retrofit)
+    api(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
 }

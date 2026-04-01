@@ -10,7 +10,7 @@ data class SuccessRegistrationResponse(
     @SerializedName("full_name")
     val fullName: String,
     @SerializedName("avatar_url")
-    val avatarUrl: String,
+    val avatarUrl: String?,
     @SerializedName("email")
     val email: String,
     @SerializedName("created_at")

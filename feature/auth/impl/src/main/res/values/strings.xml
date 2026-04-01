@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="auth_error_enter_email">Введите email</string>
+    <string name="auth_error_enter_password">Введите пароль</string>
+    <string name="auth_error_enter_username">Введите username</string>
+    <string name="auth_error_enter_name">Введите имя</string>
+    <string name="auth_error_no_internet">Нет интернета</string>
+    <string name="auth_error_unauthorized">Ошибка авторизации</string>
+    <string name="auth_error_forbidden">Доступ запрещен</string>
+    <string name="auth_error_not_found">Ничего не найдено</string>
+    <string name="auth_error_unknown">Неизвестная ошибка</string>
+
+        <string name="auth_title_login">Вход</string>
+        <string name="auth_title_registration">Регистрация</string>
+
+        <string name="auth_tab_login">Вход</string>
+        <string name="auth_tab_registration">Регистрация</string>
+
+        <string name="auth_label_email">Email</string>
+        <string name="auth_label_username">Username</string>
+        <string name="auth_label_name">Имя</string>
+        <string name="auth_label_password">Пароль</string>
+
+    <string name="auth_action_login">Войти</string>
+    <string name="auth_action_registration">Зарегистрироваться</string>
+
+    <string name="auth_switch_to_registration">Нет аккаунта? Создать</string>
+    <string name="auth_switch_to_login">Уже есть аккаунт? Войти</string>
+
+    <string name="auth_result_login_title">Результат входа</string>
+    <string name="auth_result_registration_title">Результат регистрации</string>
+
+    <string name="auth_result_token">token: %1$s</string>
+    <string name="auth_result_type">type: %1$s</string>
+    <string name="auth_result_id">id: %1$s</string>
+    <string name="auth_result_username">username: %1$s</string>
+    <string name="auth_result_name">name: %1$s</string>
+    <string name="auth_result_email">email: %1$s</string>
+</resources>

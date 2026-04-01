@@ -1,10 +1,20 @@
 package com.example.data.mapper
 
+import com.example.data.model.LoginDataModel
 import com.example.data.model.UserDataModel
+import com.example.domain.model.LoginInfo
 import com.example.domain.model.UserInfo
+import com.example.network.models.response.SuccessLoginResponse
 import com.example.network.models.response.SuccessRegistrationResponse
 
 class UserDataMapper {
+    fun mapToDomain(loginDataModel: LoginDataModel): LoginInfo {
+        return LoginInfo(
+            accessToken = loginDataModel.accessToken,
+            tokenType = loginDataModel.tokenType,
+        )
+    }
+
     fun mapToDomain(userDataModel: UserDataModel): UserInfo {
         return UserInfo(
             id = userDataModel.id,
@@ -14,6 +24,13 @@ class UserDataMapper {
             email = userDataModel.email,
             createdAt = userDataModel.createdAt,
             updatedAt = userDataModel.updatedAt,
+        )
+    }
+
+    fun mapToData(response: SuccessLoginResponse): LoginDataModel {
+        return LoginDataModel(
+            accessToken = response.accessToken,
+            tokenType = response.tokenType,
         )
     }
 

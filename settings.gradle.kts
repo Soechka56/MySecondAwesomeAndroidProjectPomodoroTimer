@@ -27,6 +27,7 @@ dependencyResolutionManagement {
 rootProject.name = "MySecondAwesomeAndroidProjectPomodoroTimer"
 include(":app")
 include(":core:designsystem")
+include(":core:di")
 include(":feature")
 include(":feature:auth")
 include(":feature:auth:api")
