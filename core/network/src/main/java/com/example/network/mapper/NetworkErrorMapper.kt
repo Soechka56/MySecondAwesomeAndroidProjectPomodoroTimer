@@ -3,14 +3,17 @@ package com.example.network.mapper
 import com.example.network.models.response.ErrorResponse
 import com.google.gson.Gson
 import okhttp3.ResponseBody
+import javax.inject.Inject
+import javax.inject.Singleton
 
 sealed interface SimpleNetworkResult {
     data object Success : SimpleNetworkResult
     data class Error(val message: String) : SimpleNetworkResult
 }
 
-class NetworkErrorMapper(
-    private val gson: Gson = Gson(),
+@Singleton
+class NetworkErrorMapper @Inject constructor(
+    private val gson: Gson,
 ) {
     fun map(code: Int, errorBody: ResponseBody? = null): SimpleNetworkResult {
         return when (code) {

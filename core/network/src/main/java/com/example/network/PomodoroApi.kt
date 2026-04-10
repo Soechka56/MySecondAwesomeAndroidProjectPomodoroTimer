@@ -9,12 +9,12 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface PomodoroApi {
-    @POST("register")
+    @POST("auth/register")
     suspend fun registerAccount(
         @Body user: PostUserRegistrationData
     ): Response<SuccessRegistrationResponse>
 
-    @POST("login")
+    @POST("auth/login")
     suspend fun loginAccount(
         @Body user: PostUserLoginData
     ): Response<SuccessLoginResponse>

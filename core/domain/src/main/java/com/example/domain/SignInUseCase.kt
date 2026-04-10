@@ -5,8 +5,9 @@ import com.example.domain.repository.ResultOfOperation
 import com.example.domain.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class SignInUseCase(
+class SignInUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
     suspend operator fun invoke(

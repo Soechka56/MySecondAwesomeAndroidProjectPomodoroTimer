@@ -9,5 +9,5 @@ android {
 dependencies {
     implementation(project(path=":core:domain"))
     implementation(project(path=":core:network"))
-
+    implementation(libs.javax.inject)
 }

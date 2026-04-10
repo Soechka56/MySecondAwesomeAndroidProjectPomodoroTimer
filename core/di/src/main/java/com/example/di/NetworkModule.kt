@@ -1,7 +1,6 @@
 package com.example.di
 
 import com.example.network.PomodoroApi
-import com.example.network.mapper.NetworkErrorMapper
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -36,15 +35,7 @@ class NetworkModule {
         return retrofit.create(PomodoroApi::class.java)
     }
 
-    @Provides
-    @Singleton
-    fun provideNetworkErrorMapper(
-        gson: Gson,
-    ): NetworkErrorMapper {
-        return NetworkErrorMapper(gson)
-    }
-
     private companion object {
-        const val BASE_URL = "http://10.0.2.2:8000/"
+        const val BASE_URL = "http://10.0.2.2:8000/api/v1/"
     }
 }

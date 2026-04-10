@@ -3,10 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.domain"
+    namespace = "com.example.navigation"
+
 }
 
 dependencies {
-    implementation(libs.x.lifecycle.runtime.ktx)
+    api(libs.androidx.navigation3.runtime)
     implementation(libs.javax.inject)
 }

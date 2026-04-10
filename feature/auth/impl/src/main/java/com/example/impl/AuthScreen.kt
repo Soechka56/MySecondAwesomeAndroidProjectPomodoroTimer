@@ -20,18 +20,20 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import com.example.api.contract.AuthResult
-import com.example.api.contract.AuthType
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.api.AuthResult
+import com.example.api.AuthType
 import com.soechka1.designsystem.component.shared.BaseCard
 import com.soechka1.designsystem.theme.PomodoroTheme
 
 @Composable
 fun AuthScreen(
-    viewModel: AuthViewModel,
+    factory: AuthViewModel.Factory,
     onResult: (AuthResult) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val spacing = PomodoroTheme.spacing
+    val viewModel: AuthViewModel = viewModel(factory = factory)
 
     viewModel.resultEvent?.let { event ->
         LaunchedEffect(event.first) {

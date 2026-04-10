@@ -11,8 +11,9 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:domain"))
     implementation(project(":core:network"))
+    implementation(project(":core:navigation"))
+
     implementation(project(":feature:auth:impl"))
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
-    implementation(libs.x.lifecycle.viewmodel.ktx)
 }

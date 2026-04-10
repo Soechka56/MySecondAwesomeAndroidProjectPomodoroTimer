@@ -12,8 +12,9 @@ import com.example.network.mapper.SimpleNetworkResult
 import com.example.network.models.request.PostUserLoginData
 import com.example.network.models.request.PostUserRegistrationData
 import java.io.IOException
+import javax.inject.Inject
 
-class UserRepositoryImpl(
+class UserRepositoryImpl @Inject constructor(
     private val pomodoroApi: PomodoroApi,
     private val userDataMapper: UserDataMapper,
     private val networkErrorMapper: NetworkErrorMapper,

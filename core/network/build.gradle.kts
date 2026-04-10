@@ -9,4 +9,5 @@ android {
 dependencies {
     api(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
+    implementation(libs.javax.inject)
 }

@@ -8,10 +8,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.example.api.contract.AuthResult
-import com.example.api.contract.AuthType
-import com.example.api.contract.model.LoginResult
-import com.example.api.contract.model.RegistrationResult
+import com.example.api.AuthResult
+import com.example.api.AuthType
+import com.example.impl.model.LoginResult
+import com.example.impl.model.RegistrationResult
 import com.example.domain.LogInUseCase
 import com.example.domain.SignInUseCase
 import com.example.domain.model.LoginInfo
@@ -19,6 +19,7 @@ import com.example.domain.model.UserInfo
 import com.example.domain.repository.OperationError
 import com.example.domain.repository.ResultOfOperation
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.reflect.KClass
 
 class AuthViewModel(
@@ -194,7 +195,7 @@ class AuthViewModel(
         )
     }
 
-    class Factory(
+    class Factory @Inject constructor(
         private val appContext: Context,
         private val logInUseCase: LogInUseCase,
         private val signInUseCase: SignInUseCase,

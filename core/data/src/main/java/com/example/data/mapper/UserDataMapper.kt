@@ -6,8 +6,9 @@ import com.example.domain.model.LoginInfo
 import com.example.domain.model.UserInfo
 import com.example.network.models.response.SuccessLoginResponse
 import com.example.network.models.response.SuccessRegistrationResponse
+import javax.inject.Inject
 
-class UserDataMapper {
+class UserDataMapper @Inject constructor() {
     fun mapToDomain(loginDataModel: LoginDataModel): LoginInfo {
         return LoginInfo(
             accessToken = loginDataModel.accessToken,
