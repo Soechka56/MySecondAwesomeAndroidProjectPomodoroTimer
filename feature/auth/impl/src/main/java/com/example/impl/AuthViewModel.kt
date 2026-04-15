@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
-class AuthViewModel(
+class AuthViewModel @Inject constructor(
     private val appContext: Context,
     private val logInUseCase: LogInUseCase,
     private val signInUseCase: SignInUseCase,
@@ -195,21 +195,4 @@ class AuthViewModel(
         )
     }
 
-    class Factory @Inject constructor(
-        private val appContext: Context,
-        private val logInUseCase: LogInUseCase,
-        private val signInUseCase: SignInUseCase,
-    ) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(
-            modelClass: KClass<T>,
-            extras: CreationExtras
-        ): T {
-            return AuthViewModel(
-                appContext = appContext.applicationContext,
-                logInUseCase = logInUseCase,
-                signInUseCase = signInUseCase,
-            ) as T
-        }
-    }
 }

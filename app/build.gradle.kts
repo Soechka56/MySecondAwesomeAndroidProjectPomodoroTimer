@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.app.android.application)
     alias(libs.plugins.app.compose.screen)
+    alias(libs.plugins.app.dagger)
 }
 
 android {

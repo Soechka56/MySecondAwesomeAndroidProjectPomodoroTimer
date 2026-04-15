@@ -1,6 +1,7 @@
 package com.example.di
 
 import android.content.Context
+import com.example.api.AuthDependencies
 import com.example.impl.di.AuthModule
 import com.example.navigation.EntryProviderInstaller
 import com.example.navigation.Navigator
@@ -14,9 +15,10 @@ import javax.inject.Singleton
         AuthModule::class,
         NetworkModule::class,
         DataModule::class,
+        ViewModelFactoryModule::class,
     ]
 )
-interface AppComponent {
+interface AppComponent: AuthDependencies {
 
     fun navigator(): Navigator
 
