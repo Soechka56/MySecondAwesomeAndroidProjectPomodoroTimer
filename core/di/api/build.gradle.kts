@@ -4,5 +4,9 @@ plugins {
 }
 
 android {
-    namespace = "com.example.di"
+    namespace = "com.di.api"
+}
+
+dependencies{
+    implementation(libs.x.lifecycle.viewmodel.compose)
 }

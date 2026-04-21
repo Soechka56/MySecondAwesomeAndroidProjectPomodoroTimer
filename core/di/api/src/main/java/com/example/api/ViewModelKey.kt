@@ -1,9 +1,8 @@
-package com.example.impl.di
+package com.example.api
 
 import androidx.lifecycle.ViewModel
 import dagger.MapKey
 import kotlin.reflect.KClass
-
 
 @MapKey
 @Target(

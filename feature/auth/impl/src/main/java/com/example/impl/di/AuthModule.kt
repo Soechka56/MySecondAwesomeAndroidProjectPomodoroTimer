@@ -2,6 +2,7 @@ package com.example.impl.di
 
 import androidx.lifecycle.ViewModel
 import com.example.api.AuthNavKey
+import com.example.api.ViewModelKey
 import com.example.impl.AuthScreen
 import com.example.impl.AuthViewModel
 import com.example.navigation.EntryProviderInstaller

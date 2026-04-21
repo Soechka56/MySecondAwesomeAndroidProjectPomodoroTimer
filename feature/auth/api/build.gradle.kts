@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.api"
+    namespace = "com.feature.auth.api"
 }
 
 dependencies{

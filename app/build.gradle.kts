@@ -11,7 +11,8 @@ android {
 dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:navigation"))
-    implementation(project(":core:di"))
+    implementation(project(":core:di:impl"))
+    implementation(project(":core:di:api"))
 
     // feature api
     implementation(project(":feature:auth:api"))

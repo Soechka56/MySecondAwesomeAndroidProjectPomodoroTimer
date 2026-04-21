@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.impl"
+    namespace = "com.feature.auth.impl"
 }
 
 dependencies {
@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:navigation"))
+    implementation(project(":core:di:api"))
 
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)

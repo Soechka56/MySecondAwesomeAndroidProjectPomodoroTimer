@@ -1,9 +1,9 @@
 package com.example.impl
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,13 +17,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.api.AuthResult
 import com.example.api.AuthType
+import com.example.impl.model.AuthScreenEvent
+import com.feature.auth.impl.R
 import com.soechka1.designsystem.component.shared.BaseCard
 import com.soechka1.designsystem.theme.PomodoroTheme
 
@@ -34,11 +36,14 @@ fun AuthScreen(
     modifier: Modifier = Modifier,
 ) {
     val spacing = PomodoroTheme.spacing
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
 
-    viewModel.resultEvent?.let { event ->
-        LaunchedEffect(event.first) {
-            onResult(event.second)
-            viewModel.clearResultEvent()
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is AuthScreenEvent.ShowAuthResult -> {}
+                is AuthScreenEvent.NavigateNext -> {}
+            }
         }
     }
 
@@ -52,7 +57,7 @@ fun AuthScreen(
         ) {
             item {
                 Text(
-                    text = if (viewModel.authType == AuthType.LOGIN) {
+                    text = if (uiState.authType == AuthType.LOGIN) {
                         stringResource(R.string.auth_title_login)
                     } else {
                         stringResource(R.string.auth_title_registration)
@@ -70,35 +75,17 @@ fun AuthScreen(
                         verticalArrangement = Arrangement.spacedBy(spacing.medium),
                         modifier = Modifier.fillMaxWidth(),
                     ) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(spacing.small),
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            Button(
-                                onClick = { viewModel.updateAuthType(AuthType.LOGIN) },
-                                modifier = Modifier.weight(1f),
-                            ) {
-                                Text(text = stringResource(R.string.auth_tab_login))
-                            }
-                            Button(
-                                onClick = { viewModel.updateAuthType(AuthType.REGISTRATION) },
-                                modifier = Modifier.weight(1f),
-                            ) {
-                                Text(text = stringResource(R.string.auth_tab_registration))
-                            }
-                        }
-
                         OutlinedTextField(
-                            value = viewModel.email,
+                            value = uiState.email,
                             onValueChange = viewModel::updateEmail,
                             label = { Text(text = stringResource(R.string.auth_label_email)) },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                         )
 
-                        if (viewModel.authType == AuthType.REGISTRATION) {
+                        if (uiState.authType == AuthType.REGISTRATION) {
                             OutlinedTextField(
-                                value = viewModel.username,
+                                value = uiState.username,
                                 onValueChange = viewModel::updateUsername,
                                 label = { Text(text = stringResource(R.string.auth_label_username)) },
                                 singleLine = true,
@@ -106,7 +93,7 @@ fun AuthScreen(
                             )
 
                             OutlinedTextField(
-                                value = viewModel.fullName,
+                                value = uiState.fullName,
                                 onValueChange = viewModel::updateFullName,
                                 label = { Text(text = stringResource(R.string.auth_label_name)) },
                                 singleLine = true,
@@ -115,7 +102,7 @@ fun AuthScreen(
                         }
 
                         OutlinedTextField(
-                            value = viewModel.password,
+                            value = uiState.password,
                             onValueChange = viewModel::updatePassword,
                             label = { Text(text = stringResource(R.string.auth_label_password)) },
                             visualTransformation = PasswordVisualTransformation(),
@@ -125,14 +112,14 @@ fun AuthScreen(
 
                         Button(
                             onClick = viewModel::submit,
-                            enabled = !viewModel.isLoading,
+                            enabled = !uiState.isLoading,
                             modifier = Modifier.fillMaxWidth(),
                         ) {
-                            if (viewModel.isLoading) {
+                            if (uiState.isLoading) {
                                 CircularProgressIndicator()
                             } else {
                                 Text(
-                                    text = if (viewModel.authType == AuthType.LOGIN) {
+                                    text = if (uiState.authType == AuthType.LOGIN) {
                                         stringResource(R.string.auth_action_login)
                                     } else {
                                         stringResource(R.string.auth_action_registration)
@@ -144,7 +131,7 @@ fun AuthScreen(
                         TextButton(
                             onClick = {
                                 viewModel.updateAuthType(
-                                    if (viewModel.authType == AuthType.LOGIN) {
+                                    if (uiState.authType == AuthType.LOGIN) {
                                         AuthType.REGISTRATION
                                     } else {
                                         AuthType.LOGIN
@@ -154,7 +141,7 @@ fun AuthScreen(
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             Text(
-                                text = if (viewModel.authType == AuthType.LOGIN) {
+                                text = if (uiState.authType == AuthType.LOGIN) {
                                     stringResource(R.string.auth_switch_to_registration)
                                 } else {
                                     stringResource(R.string.auth_switch_to_login)
@@ -165,7 +152,7 @@ fun AuthScreen(
                 }
             }
 
-            viewModel.errorMessage?.let { message ->
+            uiState.errorMessage?.let { message ->
                 item {
                     Text(
                         text = message,
@@ -174,7 +161,7 @@ fun AuthScreen(
                 }
             }
 
-            viewModel.loginResult?.let { result ->
+            uiState.loginResult?.let { result ->
                 item {
                     BaseCard(
                         modifier = Modifier.fillMaxWidth(),
@@ -185,14 +172,19 @@ fun AuthScreen(
                             modifier = Modifier.fillMaxWidth(),
                         ) {
                             Text(text = stringResource(R.string.auth_result_login_title))
-                            Text(text = stringResource(R.string.auth_result_token, result.accessToken))
+                            Text(
+                                text = stringResource(
+                                    R.string.auth_result_token,
+                                    result.accessToken
+                                )
+                            )
                             Text(text = stringResource(R.string.auth_result_type, result.tokenType))
                         }
                     }
                 }
             }
 
-            viewModel.registrationResult?.let { result ->
+            uiState.registrationResult?.let { result ->
                 item {
                     BaseCard(
                         modifier = Modifier.fillMaxWidth(),
@@ -204,7 +196,12 @@ fun AuthScreen(
                         ) {
                             Text(text = stringResource(R.string.auth_result_registration_title))
                             Text(text = stringResource(R.string.auth_result_id, result.id))
-                            Text(text = stringResource(R.string.auth_result_username, result.username))
+                            Text(
+                                text = stringResource(
+                                    R.string.auth_result_username,
+                                    result.username
+                                )
+                            )
                             Text(text = stringResource(R.string.auth_result_name, result.fullName))
                             Text(text = stringResource(R.string.auth_result_email, result.email))
                         }

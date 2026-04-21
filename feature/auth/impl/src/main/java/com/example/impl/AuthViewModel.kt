@@ -1,168 +1,202 @@
 package com.example.impl
 
 import android.content.Context
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.api.AuthResult
 import com.example.api.AuthType
-import com.example.impl.model.LoginResult
-import com.example.impl.model.RegistrationResult
 import com.example.domain.LogInUseCase
 import com.example.domain.SignInUseCase
 import com.example.domain.model.LoginInfo
 import com.example.domain.model.UserInfo
 import com.example.domain.repository.OperationError
 import com.example.domain.repository.ResultOfOperation
+import com.example.impl.model.AuthScreenEvent
+import com.example.impl.model.AuthScreenState
+import com.example.impl.model.LoginResult
+import com.example.impl.model.RegistrationResult
+import com.feature.auth.impl.R
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.reflect.KClass
 
 class AuthViewModel @Inject constructor(
     private val appContext: Context,
     private val logInUseCase: LogInUseCase,
     private val signInUseCase: SignInUseCase,
 ) : ViewModel() {
-    var authType by mutableStateOf(AuthType.LOGIN)
-        private set
 
-    var email by mutableStateOf("")
-        private set
+    private val _state = MutableStateFlow(AuthScreenState())
+    val state = _state.asStateFlow()
 
-    var password by mutableStateOf("")
-        private set
+    private val _events = MutableSharedFlow<AuthScreenEvent>()
+    val events = _events.asSharedFlow()
 
-    var username by mutableStateOf("")
-        private set
-
-    var fullName by mutableStateOf("")
-        private set
-
-    var isLoading by mutableStateOf(false)
-        private set
-
-    var errorMessage by mutableStateOf<String?>(null)
-        private set
-
-    var loginResult by mutableStateOf<LoginResult?>(null)
-        private set
-
-    var registrationResult by mutableStateOf<RegistrationResult?>(null)
-        private set
-
-    var resultEvent by mutableStateOf<Pair<Long, AuthResult>?>(null)
-        private set
 
     fun updateEmail(value: String) {
-        email = value
+        _state.update { state -> state.copy(email = value) }
     }
 
     fun updatePassword(value: String) {
-        password = value
+        _state.update { state -> state.copy(password = value) }
     }
 
     fun updateUsername(value: String) {
-        username = value
+        _state.update { state -> state.copy(username = value) }
     }
+
 
     fun updateFullName(value: String) {
-        fullName = value
+        _state.update { state -> state.copy(fullName = value) }
     }
+
 
     fun updateAuthType(value: AuthType) {
-        authType = value
-        errorMessage = null
-        loginResult = null
-        registrationResult = null
-    }
-
-    fun clearResultEvent() {
-        resultEvent = null
+        _state.update {
+            it.copy(
+                authType = value,
+                errorMessage = null,
+                loginResult = null,
+                registrationResult = null
+            )
+        }
     }
 
     fun submit() {
         val validationMessage = validate()
         if (validationMessage != null) {
-            errorMessage = validationMessage
-            resultEvent = System.currentTimeMillis() to AuthResult.Error(validationMessage)
+            with(state.value) {
+                errorMessage = validationMessage
+            }
+            _events.tryEmit(AuthScreenEvent.ShowAuthResult(AuthResult.Error(validationMessage)))
+
             return
         }
 
         viewModelScope.launch {
-            isLoading = true
-            errorMessage = null
+            _state.update {
+                it.copy(
+                    isLoading = true,
+                    errorMessage = null
+                )
+            }
 
-            when (authType) {
+            when (state.value.authType) {
                 AuthType.LOGIN -> handleLogin()
                 AuthType.REGISTRATION -> handleRegistration()
             }
 
-            isLoading = false
+            _state.update {
+                it.copy(
+                    isLoading = false
+                )
+            }
         }
     }
 
     private suspend fun handleLogin() {
-        when (
-            val result = logInUseCase(
+        val result = with(state.value) {
+            logInUseCase(
                 email = email.trim(),
-                password = password,
+                password = password
             )
-        ) {
+        }
+
+        when (result) {
             is ResultOfOperation.Success -> {
-                loginResult = result.data.toUiModel()
-                registrationResult = null
-                resultEvent = System.currentTimeMillis() to AuthResult.Success(AuthType.LOGIN)
+                _state.update { state ->
+                    state.copy(
+                        loginResult = result.data.toUiModel(),
+                        registrationResult = null
+                    )
+                }
+
+
+                _events.emit(
+                    AuthScreenEvent.ShowAuthResult(
+                        AuthResult.Success(AuthType.LOGIN)
+                    )
+                )
+
+
             }
 
             is ResultOfOperation.Error -> {
-                val message = result.error.toMessage()
-                errorMessage = message
-                resultEvent = System.currentTimeMillis() to AuthResult.Error(message)
+                errorAuth(result)
             }
         }
     }
 
     private suspend fun handleRegistration() {
-        when (
-            val result = signInUseCase(
+        val result = with(state.value) {
+            signInUseCase(
                 email = email.trim(),
                 username = username.trim(),
                 fullName = fullName.trim(),
                 password = password,
             )
-        ) {
+        }
+
+        when (result) {
             is ResultOfOperation.Success -> {
-                registrationResult = result.data.toUiModel()
-                loginResult = null
-                resultEvent = System.currentTimeMillis() to AuthResult.Success(AuthType.REGISTRATION)
+                _state.update { state ->
+                    state.copy(
+                        registrationResult = result.data.toUiModel(),
+                        loginResult = null
+                    )
+                }
+                _events.emit(
+                    AuthScreenEvent.ShowAuthResult(
+                        AuthResult.Success(AuthType.REGISTRATION)
+                    )
+
+                )
             }
 
             is ResultOfOperation.Error -> {
-                val message = result.error.toMessage()
-                errorMessage = message
-                resultEvent = System.currentTimeMillis() to AuthResult.Error(message)
+                errorAuth(result)
             }
         }
     }
 
+    private fun errorAuth(result: ResultOfOperation.Error) {
+        val message = result.error.toString()
+
+        _state.update {
+            it.copy(
+                errorMessage = message
+            )
+        }
+
+        viewModelScope.launch {
+            _events.emit(
+                AuthScreenEvent.ShowAuthResult(
+                    AuthResult.Error(message)
+                )
+            )
+        }
+    }
+
     private fun validate(): String? {
-        if (email.isBlank()) {
-            return appContext.getString(R.string.auth_error_enter_email)
+        with(state.value) {
+            if (email.isBlank()) {
+                return appContext.getString(R.string.auth_error_enter_email)
+            }
+            if (password.isBlank()) {
+                return appContext.getString(R.string.auth_error_enter_password)
+            }
+            if (authType == AuthType.REGISTRATION && username.isBlank()) {
+                return appContext.getString(R.string.auth_error_enter_username)
+            }
+            if (authType == AuthType.REGISTRATION && fullName.isBlank()) {
+                return appContext.getString(R.string.auth_error_enter_name)
+            }
+            return null
         }
-        if (password.isBlank()) {
-            return appContext.getString(R.string.auth_error_enter_password)
-        }
-        if (authType == AuthType.REGISTRATION && username.isBlank()) {
-            return appContext.getString(R.string.auth_error_enter_username)
-        }
-        if (authType == AuthType.REGISTRATION && fullName.isBlank()) {
-            return appContext.getString(R.string.auth_error_enter_name)
-        }
-        return null
     }
 
     private fun OperationError.toMessage(): String {
@@ -172,7 +206,8 @@ class AuthViewModel @Inject constructor(
             OperationError.Forbidden -> appContext.getString(R.string.auth_error_forbidden)
             OperationError.NotFound -> appContext.getString(R.string.auth_error_not_found)
             is OperationError.Validation -> message
-            is OperationError.Unknown -> message ?: appContext.getString(R.string.auth_error_unknown)
+            is OperationError.Unknown -> message
+                ?: appContext.getString(R.string.auth_error_unknown)
         }
     }
 

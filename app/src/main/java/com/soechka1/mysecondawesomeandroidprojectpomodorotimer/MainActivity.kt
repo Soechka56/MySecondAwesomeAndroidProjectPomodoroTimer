@@ -4,12 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
-import com.example.di.vmfactory.MultibindingViewModelFactory
 import com.soechka1.designsystem.theme.MySecondAwesomeAndroidProjectPomodoroTimerTheme
-import jakarta.inject.Inject
 
 class MainActivity : ComponentActivity() {
 
