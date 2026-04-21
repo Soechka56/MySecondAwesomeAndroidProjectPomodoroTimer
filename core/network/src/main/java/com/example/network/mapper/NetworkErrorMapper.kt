@@ -1,5 +1,6 @@
 package com.example.network.mapper
 
+import com.example.domain.repository.OperationError
 import com.example.network.models.response.ErrorResponse
 import com.google.gson.Gson
 import okhttp3.ResponseBody
@@ -18,6 +19,8 @@ class NetworkErrorMapper @Inject constructor(
     fun map(code: Int, errorBody: ResponseBody? = null): SimpleNetworkResult {
         return when (code) {
             200 -> SimpleNetworkResult.Success
+            401 -> SimpleNetworkResult.Error(OperationError.Unauthorized.toString())
+            404 -> SimpleNetworkResult.Error(OperationError.NotFound.toString())
             422 -> SimpleNetworkResult.Error(parseValidationMessage(errorBody))
             else -> SimpleNetworkResult.Error("Unknown error")
         }

@@ -10,4 +10,6 @@ dependencies {
     api(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.javax.inject)
+
+    implementation(project(path=":core:domain"))
 }
