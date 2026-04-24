@@ -12,4 +12,6 @@ dependencies {
     implementation(libs.javax.inject)
 
     implementation(project(path=":core:domain"))
+
+    androidTestImplementation(libs.androidx.junit)
 }

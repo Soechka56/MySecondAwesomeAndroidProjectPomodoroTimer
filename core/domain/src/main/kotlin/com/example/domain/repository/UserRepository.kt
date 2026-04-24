@@ -15,4 +15,6 @@ interface UserRepository {
         fullName: String,
         password: String,
     ): ResultOfOperation<UserInfo>
+
+    suspend fun showProfile(id: Int): UserInfo
 }

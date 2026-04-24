@@ -99,7 +99,7 @@ class AuthViewModel @Inject constructor(
     }
 
     private suspend fun handleLogin() {
-        val result = with(state.value) {
+        val result = with(_state.value) {
             logInUseCase(
                 email = email.trim(),
                 password = password
@@ -182,7 +182,7 @@ class AuthViewModel @Inject constructor(
     }
 
     private fun validate(): String? {
-        with(state.value) {
+        with(_state.value) {
             if (email.isBlank()) {
                 return appContext.getString(R.string.auth_error_enter_email)
             }

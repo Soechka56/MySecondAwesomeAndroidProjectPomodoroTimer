@@ -96,4 +96,8 @@ class UserRepositoryImpl @Inject constructor(
             ResultOfOperation.Error(OperationError.Unknown(exception.message))
         }
     }
+
+    override suspend fun showProfile(id: Int): UserInfo {
+        TODO("Not yet implemented")
+    }
 }
