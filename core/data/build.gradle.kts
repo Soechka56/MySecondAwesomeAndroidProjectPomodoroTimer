@@ -21,12 +21,10 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.truth)
-    testImplementation(libs.turbine)
 
     testImplementation(libs.retrofit)
     testImplementation(libs.retrofit.converter.gson)
 
-    testImplementation(libs.androidx.junit)
     testImplementation(libs.mock.web.server)
 
 }

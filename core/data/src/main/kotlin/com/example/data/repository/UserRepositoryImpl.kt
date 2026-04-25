@@ -1,24 +1,23 @@
 package com.example.data.repository
 
 import com.example.data.mapper.UserDataMapper
+import com.example.data.repository.ext.toResultOfOperation
 import com.example.domain.model.LoginInfo
 import com.example.domain.model.UserInfo
 import com.example.domain.repository.OperationError
 import com.example.domain.repository.ResultOfOperation
 import com.example.domain.repository.UserRepository
 import com.example.network.PomodoroApi
-import com.example.network.mapper.NetworkErrorMapper
-import com.example.network.mapper.SimpleNetworkResult
 import com.example.network.models.request.PostUserLoginData
 import com.example.network.models.request.PostUserRegistrationData
-import java.io.IOException
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     private val pomodoroApi: PomodoroApi,
     private val userDataMapper: UserDataMapper,
-    private val networkErrorMapper: NetworkErrorMapper,
 ) : UserRepository {
+
     override suspend fun logInAccount(
         email: String,
         password: String,
@@ -31,8 +30,8 @@ class UserRepositoryImpl @Inject constructor(
                 )
             )
 
-            when (val result = networkErrorMapper.map(response.code(), response.errorBody())) {
-                SimpleNetworkResult.Success -> {
+            when {
+                response.isSuccessful -> {
                     val body = response.body()
                     if (body == null) {
                         ResultOfOperation.Error(OperationError.Unknown("Empty response body"))
@@ -45,14 +44,10 @@ class UserRepositoryImpl @Inject constructor(
                     }
                 }
 
-                is SimpleNetworkResult.Error -> {
-                    ResultOfOperation.Error(OperationError.Validation(result.message))
-                }
+                else -> throw HttpException(response)
             }
-        } catch (_: IOException) {
-            ResultOfOperation.Error(OperationError.NoInternet)
-        } catch (exception: Exception) {
-            ResultOfOperation.Error(OperationError.Unknown(exception.message))
+        } catch (throwable: Throwable) {
+            throwable.toResultOfOperation()
         }
     }
 
@@ -72,8 +67,8 @@ class UserRepositoryImpl @Inject constructor(
                 )
             )
 
-            when (val result = networkErrorMapper.map(response.code(), response.errorBody())) {
-                SimpleNetworkResult.Success -> {
+            when {
+                response.isSuccessful -> {
                     val body = response.body()
                     if (body == null) {
                         ResultOfOperation.Error(OperationError.Unknown("Empty response body"))
@@ -86,18 +81,40 @@ class UserRepositoryImpl @Inject constructor(
                     }
                 }
 
-                is SimpleNetworkResult.Error -> {
-                    ResultOfOperation.Error(OperationError.Validation(result.message))
-                }
+                else -> throw HttpException(response)
             }
-        } catch (_: IOException) {
-            ResultOfOperation.Error(OperationError.NoInternet)
-        } catch (exception: Exception) {
-            ResultOfOperation.Error(OperationError.Unknown(exception.message))
+        } catch (throwable: Throwable) {
+            throwable.toResultOfOperation()
         }
     }
 
-    override suspend fun showProfile(id: Int): UserInfo {
-        TODO("Not yet implemented")
+    override suspend fun showProfile(id: Int): ResultOfOperation<UserInfo> {
+        return try {
+            val response = pomodoroApi.getUserProfile(id)
+            when {
+                response.isSuccessful -> {
+                    val body = response.body()
+
+                    if (body == null) {
+                        ResultOfOperation.Error(OperationError.Unknown("Empty response body"))
+                    } else {
+                        ResultOfOperation.Success(
+                            userDataMapper.mapToDomain(
+                                userDataMapper.mapToData(
+                                    body
+                                )
+                            )
+                        )
+                    }
+                }
+
+                else -> throw HttpException(response)
+            }
+
+
+        } catch (throwable: Throwable) {
+            throwable.toResultOfOperation()
+        }
     }
+
 }

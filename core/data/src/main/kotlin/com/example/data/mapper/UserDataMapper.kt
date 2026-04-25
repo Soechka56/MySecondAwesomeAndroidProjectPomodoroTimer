@@ -5,7 +5,7 @@ import com.example.data.model.UserDataModel
 import com.example.domain.model.LoginInfo
 import com.example.domain.model.UserInfo
 import com.example.network.models.response.SuccessLoginResponse
-import com.example.network.models.response.SuccessRegistrationResponse
+import com.example.network.models.response.UserInfoResponse
 import javax.inject.Inject
 
 class UserDataMapper @Inject constructor() {
@@ -47,7 +47,7 @@ class UserDataMapper @Inject constructor() {
         )
     }
 
-    fun mapToData(response: SuccessRegistrationResponse): UserDataModel {
+    fun mapToData(response: UserInfoResponse): UserDataModel {
         return UserDataModel(
             id = response.id,
             username = response.username,

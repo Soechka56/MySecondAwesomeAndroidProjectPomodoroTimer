@@ -2,7 +2,7 @@ package com.example.network.models.response
 
 import com.google.gson.annotations.SerializedName
 
-data class SuccessRegistrationResponse(
+data class UserInfoResponse(
     @SerializedName("id")
     val id: Long,
     @SerializedName("username")
