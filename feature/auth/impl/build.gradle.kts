@@ -13,10 +13,11 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:navigation"))
-    implementation(project(":core:di:api"))
+    implementation(project(":core:viewmodel"))
 
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
+
 
     androidTestImplementation(libs.androidx.junit)
 }

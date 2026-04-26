@@ -1,8 +1,7 @@
 package com.example.di
 
 import android.content.Context
-import com.example.api.AuthDependencies
-import com.example.impl.di.AuthModule
+import com.example.impl.di.AuthEntryModule
 import com.example.navigation.EntryProviderInstaller
 import com.example.navigation.Navigator
 import dagger.BindsInstance
@@ -12,16 +11,14 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [
-        AuthModule::class,
         NetworkModule::class,
         DataModule::class,
-        ViewModelFactoryModule::class,
+        AuthEntryModule::class,
     ]
 )
-interface AppComponent: AuthDependencies {
+interface AppComponent {
 
     fun navigator(): Navigator
-
     fun entryProviderInstallers(): Set<EntryProviderInstaller>
 
     @Component.Factory

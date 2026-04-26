@@ -1,4 +1,4 @@
-package com.example.di.vmfactory
+package com.example.viewmodel.vmfactory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

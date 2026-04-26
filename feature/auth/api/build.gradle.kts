@@ -8,8 +8,8 @@ android {
 }
 
 dependencies{
+    implementation(project(path=":core:navigation"))
+    implementation(project(path=":core:domain"))
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.androidx.navigation3.runtime)
-
     implementation(libs.x.lifecycle.viewmodel.compose)
 }

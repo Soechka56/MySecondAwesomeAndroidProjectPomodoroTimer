@@ -1,7 +1,7 @@
-package com.example.di
+package com.example.viewmodel
 
 import androidx.lifecycle.ViewModelProvider
-import com.example.di.vmfactory.MultibindingViewModelFactory
+import com.example.viewmodel.vmfactory.MultibindingViewModelFactory
 import dagger.Binds
 import dagger.Module
 
