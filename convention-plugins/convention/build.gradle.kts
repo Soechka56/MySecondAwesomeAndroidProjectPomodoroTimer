@@ -39,13 +39,17 @@ gradlePlugin {
             id = libs.plugins.app.android.library.get().pluginId
             implementationClass = "AndroidLibraryConventionPlugin"
         }
-        register("androidAppCompose") {
-            id = libs.plugins.app.compose.get().pluginId
+        register("androidAppComposeBase") {
+            id = libs.plugins.app.compose.base.get().pluginId
             implementationClass = "ComposeConventionPlugin"
         }
-        register("androidHilt") {
-            id = libs.plugins.app.hilt.get().pluginId
-            implementationClass = "HiltConventionPlugin"
+        register("androidDagger") {
+            id = libs.plugins.app.dagger.get().pluginId
+            implementationClass = "DaggerConventionPlugin"
+        }
+        register("androidAppComposeScreen"){
+            id = libs.plugins.app.compose.screen.get().pluginId
+            implementationClass = "ComposeScreenConventionPlugin"
         }
     }
 }
