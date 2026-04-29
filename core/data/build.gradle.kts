@@ -1,17 +1,29 @@
 plugins {
     alias(libs.plugins.app.android.library)
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.example.data"
 }
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
 
 dependencies {
     implementation(project(path=":core:domain"))
     implementation(project(path=":core:network"))
 
     implementation(libs.androidx.core.ktx)
+
+    // скоро настанет твой час =)
+    //implementation(libs.room)
+    //implementation(libs.room.ktx)
+
+    implementation(libs.x.datastore.preferences)
+
+    ksp(libs.room.compiler)
 
     compileOnly(libs.javax.inject)
 
@@ -21,10 +33,8 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.truth)
-
     testImplementation(libs.retrofit)
     testImplementation(libs.retrofit.converter.gson)
-
     testImplementation(libs.mock.web.server)
 
 }

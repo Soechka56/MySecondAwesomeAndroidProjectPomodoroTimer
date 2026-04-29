@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:network"))
     implementation(project(":core:navigation"))
+    implementation(project(":core:build-config"))
 
     implementation(project(":feature:auth:api"))
     implementation(project(":feature:auth:impl"))

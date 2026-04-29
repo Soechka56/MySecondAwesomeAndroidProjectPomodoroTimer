@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:navigation"))
     implementation(project(":core:di"))
+    implementation(project(":core:build-config"))
 
     // feature api
     implementation(project(":feature:auth:api"))

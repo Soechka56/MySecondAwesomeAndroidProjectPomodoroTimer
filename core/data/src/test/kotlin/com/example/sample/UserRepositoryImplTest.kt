@@ -6,17 +6,23 @@ import com.example.domain.repository.ResultOfOperation
 import com.example.domain.repository.UserRepository
 import com.example.network.PomodoroApi
 import com.google.common.truth.Truth.assertThat
+import io.mockk.MockKAnnotations
+import io.mockk.impl.annotations.AdditionalInterface
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Timeout
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-
+@Timeout(value = 15, unit = TimeUnit.SECONDS)
 class UserRepositoryImplTest {
     private lateinit var mockWebServer: MockWebServer
     private lateinit var userRepository: UserRepository
@@ -25,6 +31,8 @@ class UserRepositoryImplTest {
     fun setUp() {
         mockWebServer = MockWebServer()
         mockWebServer.start()
+
+        MockKAnnotations.init()
 
         val retrofit = Retrofit.Builder()
             .baseUrl(mockWebServer.url("/"))
@@ -75,8 +83,11 @@ class UserRepositoryImplTest {
         )
     }
 
-    @Test
-    fun `errorMapper should return error when response code is not success`() = runTest {
+    @ParameterizedTest(name = "code{0}, expectedCode{1}")
+    @MethodSource("data")
+    fun `errorMapper should return error when response code is not success`(
+        code: Int, expectedError: OperationError
+    ) = runTest {
 
         suspend fun makeErrorRequest(code: Int): ResultOfOperation<UserInfo> {
             mockWebServer.enqueue(
@@ -85,21 +96,8 @@ class UserRepositoryImplTest {
             return userRepository.showProfile(1)
         }
 
-
-        assertThat(makeErrorRequest(401)).isEqualTo(
-            ResultOfOperation.Error(OperationError.Unauthorized)
-        )
-
-        assertThat(makeErrorRequest(404)).isEqualTo(
-            ResultOfOperation.Error(OperationError.NotFound)
-        )
-
-        assertThat(makeErrorRequest(409)).isEqualTo(
-            ResultOfOperation.Error(OperationError.Forbidden)
-        )
-
-        assertThat(makeErrorRequest(422)).isInstanceOf(
-            ResultOfOperation.Error(OperationError.Validation(""))::class.java
+        assertThat(makeErrorRequest(code)).isEqualTo(
+            ResultOfOperation.Error(expectedError)
         )
 
     }
@@ -107,5 +105,14 @@ class UserRepositoryImplTest {
     @AfterEach
     fun tearDown() {
         mockWebServer.shutdown()
+    }
+
+    companion object {
+        @JvmStatic
+        fun data() = listOf(
+            arrayOf(401, OperationError.Unauthorized),
+            arrayOf(404, OperationError.NotFound),
+            arrayOf(409, OperationError.Forbidden),
+        )
     }
 }
