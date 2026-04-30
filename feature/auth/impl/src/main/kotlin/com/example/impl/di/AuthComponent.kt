@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.api.AuthDependencies
 import com.example.api.AuthNavKey
+import com.example.common.qualifier.ApplicationContext
 import com.example.domain.LogInUseCase
 import com.example.domain.SignInUseCase
 import com.example.impl.AuthScreen
@@ -55,7 +56,7 @@ object AuthEntryModule {
     @Provides
     @IntoSet
     fun provideAuthEntry(
-        context: Context,
+        @ApplicationContext context: Context,
         navigator: Navigator,
         logInUseCase: LogInUseCase,
         signInUseCase: SignInUseCase,

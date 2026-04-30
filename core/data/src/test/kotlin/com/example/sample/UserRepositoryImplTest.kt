@@ -7,8 +7,7 @@ import com.example.domain.repository.UserRepository
 import com.example.network.PomodoroApi
 import com.google.common.truth.Truth.assertThat
 import io.mockk.MockKAnnotations
-import io.mockk.impl.annotations.AdditionalInterface
-import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -42,6 +41,7 @@ class UserRepositoryImplTest {
         userRepository = UserRepositoryImpl(
             retrofit.create(PomodoroApi::class.java),
             userDataMapper = UserDataMapper(),
+            dispatcher = Dispatchers.IO
         )
     }
 
@@ -68,6 +68,7 @@ class UserRepositoryImplTest {
         val request = mockWebServer.takeRequest(1, TimeUnit.SECONDS)
 
         assertThat(request?.path).isEqualTo("/users/0")
+
         assertThat(result).isEqualTo(
             ResultOfOperation.Success(
                 UserInfo(

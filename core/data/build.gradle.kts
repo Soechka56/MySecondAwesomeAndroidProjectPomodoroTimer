@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.app.android.library)
+    alias(libs.plugins.app.dagger)
     alias(libs.plugins.ksp)
 }
 
@@ -14,7 +15,10 @@ ksp {
 dependencies {
     implementation(project(path=":core:domain"))
     implementation(project(path=":core:network"))
+    implementation(project(path=":core:utils"))
+    implementation(project(path=":core:common"))
 
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.core.ktx)
 
     // скоро настанет твой час =)

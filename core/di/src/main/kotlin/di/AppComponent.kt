@@ -1,11 +1,15 @@
 package com.example.di
 
 import android.content.Context
+import com.example.common.qualifier.ApplicationContext
+import com.example.data.di.DataModule
+import com.example.data.di.DataStoreModule
 import com.example.impl.di.AuthEntryModule
 import com.example.navigation.EntryProviderInstaller
 import com.example.navigation.Navigator
 import dagger.BindsInstance
 import dagger.Component
+
 import javax.inject.Singleton
 
 @Singleton
@@ -14,17 +18,17 @@ import javax.inject.Singleton
         NetworkModule::class,
         DataModule::class,
         AuthEntryModule::class,
+        CoroutinesModule::class,
     ]
 )
 interface AppComponent {
-
     fun navigator(): Navigator
     fun entryProviderInstallers(): Set<EntryProviderInstaller>
 
     @Component.Factory
     interface Factory {
         fun create(
-            @BindsInstance context: Context,
+            @ApplicationContext @BindsInstance context: Context,
             @BindsInstance startDestination: Any,
         ): AppComponent
     }
