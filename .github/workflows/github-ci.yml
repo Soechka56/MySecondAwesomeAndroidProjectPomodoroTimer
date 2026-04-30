@@ -1,8 +1,6 @@
 name: Android TDD CI
 
 on:
-  push:
-    branches: [ "tdd-dev" ]
   pull_request:
     branches: [ "tdd-dev" ]
   workflow_dispatch:
