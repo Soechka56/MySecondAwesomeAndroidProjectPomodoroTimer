@@ -1,6 +1,6 @@
 package com.example.domain
 
-import com.example.domain.model.UserInfo
+import com.example.domain.model.LoginInfo
 import com.example.domain.repository.ResultOfOperation
 import com.example.domain.repository.UserRepository
 import javax.inject.Inject
@@ -13,7 +13,7 @@ class SignInUseCase @Inject constructor(
         username: String,
         fullName: String,
         password: String,
-    ): ResultOfOperation<UserInfo> {
+    ): ResultOfOperation<LoginInfo> {
         return userRepository.signUpAccount(
             email = email,
             username = username,

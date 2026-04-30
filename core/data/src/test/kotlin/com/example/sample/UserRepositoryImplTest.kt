@@ -1,3 +1,5 @@
+import androidx.datastore.core.DataStore
+import com.example.data.datastore.UserPreferences
 import com.example.data.mapper.UserDataMapper
 import com.example.data.repository.UserRepositoryImpl
 import com.example.domain.model.UserInfo
@@ -7,6 +9,7 @@ import com.example.domain.repository.UserRepository
 import com.example.network.PomodoroApi
 import com.google.common.truth.Truth.assertThat
 import io.mockk.MockKAnnotations
+import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -41,6 +44,7 @@ class UserRepositoryImplTest {
         userRepository = UserRepositoryImpl(
             retrofit.create(PomodoroApi::class.java),
             userDataMapper = UserDataMapper(),
+            dataStore = mockk<DataStore<UserPreferences>>(),
             dispatcher = Dispatchers.IO
         )
     }

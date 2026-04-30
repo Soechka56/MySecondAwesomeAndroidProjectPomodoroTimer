@@ -1,9 +1,9 @@
 package com.example.impl
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -161,51 +161,16 @@ fun AuthScreen(
                 }
             }
 
+            // only for test
             uiState.loginResult?.let { result ->
-                item {
-                    BaseCard(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentPadding = PaddingValues(spacing.large),
-                    ) {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(spacing.small),
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            Text(text = stringResource(R.string.auth_result_login_title))
-                            Text(
-                                text = stringResource(
-                                    R.string.auth_result_token,
-                                    result.accessToken
-                                )
-                            )
-                            Text(text = stringResource(R.string.auth_result_type, result.tokenType))
-                        }
-                    }
+                item{
+                    Text(text = result.accessToken)
                 }
             }
 
             uiState.registrationResult?.let { result ->
-                item {
-                    BaseCard(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentPadding = PaddingValues(spacing.large),
-                    ) {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(spacing.small),
-                            modifier = Modifier.fillMaxWidth(),
-                        ) {
-                            Text(text = stringResource(R.string.auth_result_registration_title))
-                            Text(text = stringResource(R.string.auth_result_id, result.id))
-                            Text(
-                                text = stringResource(
-                                    R.string.auth_result_username,
-                                    result.username
-                                )
-                            )
-                            Text(text = stringResource(R.string.auth_result_name, result.fullName))
-                            Text(text = stringResource(R.string.auth_result_email, result.email))
-                        }
-                    }
+                item{
+                    Text(text = result.accessToken)
                 }
             }
         }

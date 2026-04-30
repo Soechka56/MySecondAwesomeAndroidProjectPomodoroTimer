@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.app.android.library)
     alias(libs.plugins.app.dagger)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {

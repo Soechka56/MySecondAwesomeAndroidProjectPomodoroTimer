@@ -11,11 +11,6 @@ import java.io.OutputStream
 import javax.inject.Inject
 import kotlin.io.encoding.Base64
 
-@Serializable
-data class UserPreferences(
-    val token: String? = null
-)
-
 class UserPreferencesSerializer @Inject constructor(
     private val crypto: Crypto
 ) : Serializer<UserPreferences> {

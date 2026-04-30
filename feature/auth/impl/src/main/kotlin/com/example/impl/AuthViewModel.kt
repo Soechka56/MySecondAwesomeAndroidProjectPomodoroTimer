@@ -8,13 +8,11 @@ import com.example.api.AuthType
 import com.example.domain.LogInUseCase
 import com.example.domain.SignInUseCase
 import com.example.domain.model.LoginInfo
-import com.example.domain.model.UserInfo
 import com.example.domain.repository.OperationError
 import com.example.domain.repository.ResultOfOperation
 import com.example.impl.model.AuthScreenEvent
 import com.example.impl.model.AuthScreenState
-import com.example.impl.model.LoginResult
-import com.example.impl.model.RegistrationResult
+import com.example.impl.model.AuthResult as TokenResult
 import com.feature.auth.impl.R
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,8 +67,8 @@ class AuthViewModel @Inject constructor(
     fun submit() {
         val validationMessage = validate()
         if (validationMessage != null) {
-            with(state.value) {
-                errorMessage = validationMessage
+            _state.update {
+                it.copy(errorMessage = validationMessage)
             }
             _events.tryEmit(AuthScreenEvent.ShowAuthResult(AuthResult.Error(validationMessage)))
 
@@ -164,7 +162,7 @@ class AuthViewModel @Inject constructor(
     }
 
     private fun errorAuth(result: ResultOfOperation.Error) {
-        val message = result.error.toString()
+        val message = result.error.toMessage()
 
         _state.update {
             it.copy(
@@ -186,7 +184,7 @@ class AuthViewModel @Inject constructor(
             if (email.isBlank()) {
                 return appContext.getString(R.string.auth_error_enter_email)
             }
-            if (password.isBlank()) {
+            if (password.isBlank() || password.length < 8 || !password.any { it.isDigit() }) {
                 return appContext.getString(R.string.auth_error_enter_password)
             }
             if (authType == AuthType.REGISTRATION && username.isBlank()) {
@@ -205,28 +203,16 @@ class AuthViewModel @Inject constructor(
             OperationError.Unauthorized -> appContext.getString(R.string.auth_error_unauthorized)
             OperationError.Forbidden -> appContext.getString(R.string.auth_error_forbidden)
             OperationError.NotFound -> appContext.getString(R.string.auth_error_not_found)
-            is OperationError.Validation -> message
+            is OperationError.Validation -> appContext.getString(R.string.auth_error_validation)
             is OperationError.Unknown -> message
                 ?: appContext.getString(R.string.auth_error_unknown)
         }
     }
 
-    private fun LoginInfo.toUiModel(): LoginResult {
-        return LoginResult(
+    private fun LoginInfo.toUiModel(): TokenResult {
+        return TokenResult(
             accessToken = accessToken,
             tokenType = tokenType,
-        )
-    }
-
-    private fun UserInfo.toUiModel(): RegistrationResult {
-        return RegistrationResult(
-            id = id,
-            username = username,
-            fullName = fullName,
-            avatarUrl = avatarUrl,
-            email = email,
-            createdAt = createdAt,
-            updatedAt = updatedAt,
         )
     }
 
