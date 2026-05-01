@@ -38,6 +38,7 @@ class UserRepositoryImpl @Inject constructor(
                     password = password,
                 )
             )
+
             authHandler(response)
 
         } catch (throwable: Throwable) {
@@ -60,6 +61,7 @@ class UserRepositoryImpl @Inject constructor(
                     password = password,
                 )
             )
+
             authHandler(response)
 
         } catch (throwable: Throwable) {
@@ -68,10 +70,15 @@ class UserRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun showProfile(id: Int): ResultOfOperation<UserInfo> =
+    override suspend fun showProfile(id: Int?): ResultOfOperation<UserInfo> =
         withContext(dispatcher) {
             try {
-                val response = pomodoroApi.getUserProfile(id)
+                val response = if(id == null) {
+                    pomodoroApi.getMyProfile()
+                } else {
+                    pomodoroApi.getUserProfile(id)
+                }
+
                 when {
                     response.isSuccessful -> {
                         val body = response.body()

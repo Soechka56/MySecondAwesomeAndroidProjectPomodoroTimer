@@ -1,4 +1,4 @@
-package com.example.utils;
+package com.example.utils
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
@@ -7,9 +7,14 @@ import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
-import javax.inject.Inject;
+import javax.inject.Inject
 
-class Crypto @Inject constructor(){
+interface CryptoManager{
+    fun encrypt(bytes: ByteArray): ByteArray
+    fun decrypt(bytes: ByteArray): ByteArray
+}
+
+class Crypto @Inject constructor(): CryptoManager {
     private val cipher = Cipher.getInstance(TRANSFORMATION)
 
     private val keyStore = KeyStore.getInstance("AndroidKeyStore").apply {
@@ -39,14 +44,14 @@ class Crypto @Inject constructor(){
         return existingKey?.secretKey ?: createKey()
     }
 
-    fun encrypt(bytes: ByteArray): ByteArray {
+    override fun encrypt(bytes: ByteArray): ByteArray {
         cipher.init(Cipher.ENCRYPT_MODE, getKey())
         val iv = cipher.iv
         val encrypted = cipher.doFinal(bytes)
         return iv + encrypted
     }
 
-    fun decrypt(bytes: ByteArray): ByteArray {
+    override fun decrypt(bytes: ByteArray): ByteArray {
         val iv = bytes.copyOfRange(0, cipher.blockSize)
         val data = bytes.copyOfRange(cipher.blockSize, bytes.size)
         cipher.init(Cipher.DECRYPT_MODE, getKey(), IvParameterSpec(iv))

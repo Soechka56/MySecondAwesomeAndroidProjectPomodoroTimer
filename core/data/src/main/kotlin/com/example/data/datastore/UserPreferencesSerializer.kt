@@ -1,10 +1,9 @@
 package com.example.data.datastore
 
 import androidx.datastore.core.Serializer
-import com.example.utils.Crypto
+import com.example.utils.CryptoManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
@@ -12,7 +11,7 @@ import javax.inject.Inject
 import kotlin.io.encoding.Base64
 
 class UserPreferencesSerializer @Inject constructor(
-    private val crypto: Crypto
+    private val crypto: CryptoManager
 ) : Serializer<UserPreferences> {
     override val defaultValue: UserPreferences
         get() = UserPreferences()

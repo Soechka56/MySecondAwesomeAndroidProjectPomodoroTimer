@@ -25,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 @Timeout(value = 15, unit = TimeUnit.SECONDS)
-class UserRepositoryImplTest {
+class UserRepoWorkWithMapperTest {
     private lateinit var mockWebServer: MockWebServer
     private lateinit var userRepository: UserRepository
 

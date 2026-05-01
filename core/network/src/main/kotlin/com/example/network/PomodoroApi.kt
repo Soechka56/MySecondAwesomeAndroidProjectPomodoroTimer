@@ -26,4 +26,8 @@ interface PomodoroApi {
         @Path("id") id: Int
     ): Response<UserInfoResponse>
 
+    @GET("users/me")
+    suspend fun getMyProfile(
+    ): Response<UserInfoResponse>
+
 }

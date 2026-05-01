@@ -27,6 +27,7 @@ dependencies {
     //implementation(libs.room.ktx)
 
     implementation(libs.x.datastore.preferences)
+    implementation(libs.core.ktx)
 
     ksp(libs.room.compiler)
 
@@ -41,9 +42,8 @@ dependencies {
     testImplementation(libs.retrofit)
     testImplementation(libs.retrofit.converter.gson)
     testImplementation(libs.mock.web.server)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.core.ktx)
 
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-}

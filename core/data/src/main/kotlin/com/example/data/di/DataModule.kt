@@ -9,6 +9,8 @@ import com.example.data.datastore.UserPreferences
 import com.example.data.datastore.UserPreferencesSerializer
 import com.example.data.repository.UserRepositoryImpl
 import com.example.domain.repository.UserRepository
+import com.example.utils.Crypto
+import com.example.utils.CryptoManager
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -21,6 +23,10 @@ interface DataModule {
     @Binds
     @Singleton
     fun bindUserRepository(impl: UserRepositoryImpl): UserRepository
+
+    @Binds
+    @Singleton
+    fun bindCrypto(impl: Crypto): CryptoManager
 }
 
 @Module
