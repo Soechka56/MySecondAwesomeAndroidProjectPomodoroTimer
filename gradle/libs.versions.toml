@@ -5,6 +5,9 @@ agp = "9.0.1"
 kotlin = "2.3.10"
 kotlinxCoroutines = "1.8.0"
 ksp = "2.3.5"
+room = "2.6.1"
+data-store = "1.1.1"
+gradle-secrets = "2.0.1"
 
 min-sdk = "26"
 target-sdk = "36"
@@ -22,9 +25,11 @@ compose-foundation = "1.10.2"
 compose-ui = "1.10.2"
 compose-material3 = "1.4.0"
 coil = "2.7.0"
-# Hilt
-hilt = "2.59.1"
+
+# Dagger
 javax-inject = "1"
+hilt = "2.59.1"
+
 # Retrofit
 retrofit = "3.0.0"
 
@@ -41,20 +46,27 @@ mock-web-server = "4.9.0"
 mockk = "1.13.16"
 truth = "1.4.2"
 turbine = "1.0.0"
+robolectric = "4.13"
 
 # Navigation
 androidx-navigation3 = "1.2.0-alpha01"
 kotlinxSerializationJson = "1.8.0"
 navigationCommonKtx = "2.9.7"
 junitJunit = "4.13.2"
+coreKtxVersion = "1.7.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
-
 x-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
+x-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "data-store" }
+
+# Room
+room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 
 # Compose
 x-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "compose-activity" }
@@ -76,11 +88,9 @@ x-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-
 compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "compose-material3" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
-# Hilt
+# Dagger
 dagger = { group = "com.google.dagger", name = "dagger", version.ref = "hilt" }
 dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "hilt" }
-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax-inject" }
 
 # Retrofit
@@ -90,6 +100,7 @@ retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-
 # Tests
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit" }
 junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junit-platform" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -108,6 +119,7 @@ androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation
 androidx-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 androidx-navigation-common-ktx = { group = "androidx.navigation", name = "navigation-common-ktx", version.ref = "navigationCommonKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junitJunit" }
+core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtxVersion" }
 
 [bundles]
 compose-ui = ["compose-ui", "compose-ui-graphics", "compose-ui-tooling", "compose-ui-tooling-preview"]
@@ -120,8 +132,11 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
+# Utils
+gradle-secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "gradle-secrets" }
+
 # Project Internal convention plugins
-app-android-application = { id = "app.android.application"}
+app-android-application = { id = "app.android.application" }
 app-android-library = { id = "app.android.library" }
 app-compose-base = { id = "app.compose.base" }
 app-compose-screen = { id = "app.compose.screen" }

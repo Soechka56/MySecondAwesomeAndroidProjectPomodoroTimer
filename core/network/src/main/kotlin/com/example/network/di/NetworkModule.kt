@@ -1,5 +1,6 @@
-package com.example.di
+package com.example.network.di
 
+import com.example.build_config.BuildConfigProvider
 import com.example.network.PomodoroApi
 import com.google.gson.Gson
 import dagger.Module
@@ -20,9 +21,10 @@ class NetworkModule {
     @Singleton
     fun provideRetrofit(
         gson: Gson,
+        buildConfig: BuildConfigProvider
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(buildConfig.getBaseUrl())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
@@ -33,9 +35,5 @@ class NetworkModule {
         retrofit: Retrofit,
     ): PomodoroApi {
         return retrofit.create(PomodoroApi::class.java)
-    }
-
-    private companion object {
-        const val BASE_URL = "http://10.0.2.2:8000/api/v1/"
     }
 }

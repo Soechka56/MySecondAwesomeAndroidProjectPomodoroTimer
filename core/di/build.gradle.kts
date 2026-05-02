@@ -13,6 +13,9 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:network"))
     implementation(project(":core:navigation"))
+    implementation(project(":core:build-config"))
+    implementation(project(":core:common"))
+    implementation(project(":core:utils"))
 
     implementation(project(":feature:auth:api"))
     implementation(project(":feature:auth:impl"))
@@ -20,4 +23,5 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.x.lifecycle.viewmodel.compose)
+    implementation(libs.x.datastore.preferences)
 }

@@ -6,7 +6,6 @@ Thumbs.db
 *.iws
 .gradle/
 .gradle-local/
-local.properties
 !gradle/wrapper/gradle-wrapper.jar
 
 # Kotlin

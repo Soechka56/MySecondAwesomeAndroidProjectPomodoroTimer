@@ -1,16 +1,17 @@
 package com.example.impl.model
 
+import androidx.compose.runtime.Stable
 import com.example.api.AuthType
 
+@Stable
 data class AuthScreenState (
-    var authType: AuthType = AuthType.LOGIN,
-    var email: String = "",
-    var password: String = "",
-    var username: String= "",
-    var fullName: String = "",
-    var isLoading: Boolean = false,
-    var errorMessage: String? = null,
-
-    val loginResult: LoginResult? = null,
-    val registrationResult: RegistrationResult? = null,
+    val authType: AuthType = AuthType.LOGIN,
+    val email: String = "",
+    val password: String = "",
+    val username: String = "",
+    val fullName: String = "",
+    val isLoading: Boolean = false,
+    val errorMessage: String? = null,
+    val loginResult: AuthResult? = null,
+    val registrationResult: AuthResult? = null,
 )
