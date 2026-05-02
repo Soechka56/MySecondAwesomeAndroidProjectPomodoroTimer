@@ -1,4 +1,4 @@
-package com.example.di
+package com.example.network.di
 
 import com.example.build_config.BuildConfigProvider
 import com.example.network.PomodoroApi
