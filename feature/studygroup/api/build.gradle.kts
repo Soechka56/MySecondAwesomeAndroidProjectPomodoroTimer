@@ -2,8 +2,9 @@ plugins {
     alias(libs.plugins.app.android.library)
     alias(libs.plugins.kotlin.serialization)
 }
+
 android {
-    namespace = "com.example.showleaders.api"
+    namespace = "com.example.studygroup.api"
 }
 
 dependencies{

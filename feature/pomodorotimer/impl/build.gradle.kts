@@ -10,7 +10,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:auth:api"))
+    implementation(project(":feature:pomodorotimer:api"))
     implementation(project(":core:domain"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:navigation"))

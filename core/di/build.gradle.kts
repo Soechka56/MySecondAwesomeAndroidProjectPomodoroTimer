@@ -20,6 +20,10 @@ dependencies {
     implementation(project(":feature:auth:api"))
     implementation(project(":feature:auth:impl"))
 
+    implementation(project(":feature:pomodorotimer:api"))
+    implementation(project(":feature:pomodorotimer:impl"))
+
+
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.x.lifecycle.viewmodel.compose)
