@@ -52,8 +52,8 @@ fun MyExpressiveNavigation(
                     selected = selectedIndex == index,
                     onClick = { selectedIndex = index },
                     colors = ShortNavigationBarItemDefaults.colors(
-                        selectedIconColor = pomodoroColors.accentBlue,
-                        unselectedIconColor = pomodoroColors.accentGreen,
+                        selectedIconColor = pomodoroColors.accentGreen,
+                        unselectedIconColor = pomodoroColors.accentOrange,
                         selectedTextColor = pomodoroColors.textPrimary,
                         selectedIndicatorColor = pomodoroColors.surface
                     ),
