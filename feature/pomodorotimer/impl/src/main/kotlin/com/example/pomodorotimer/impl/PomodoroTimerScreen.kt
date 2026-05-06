@@ -1,6 +1,5 @@
 package com.example.pomodorotimer.impl
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,69 +23,79 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.pomodorotimer.impl.model.PomodoroSubjectUiModel
+import com.example.pomodorotimer.impl.model.PomodoroTimerEvent
+import com.example.pomodorotimer.impl.model.PomodoroTimerState
+import com.example.pomodorotimer.impl.model.SubjectColor
+import com.example.pomodorotimer.impl.model.SubjectIcon
 import com.soechka1.designsystem.component.shared.BaseCard
 import com.soechka1.designsystem.theme.MySecondAwesomeAndroidProjectPomodoroTimerTheme
 import com.soechka1.designsystem.theme.PomodoroTheme
+import com.soechka1.designsystem.R as DesignSystemR
 
-private data class SubjectUiModel(
-    val title: String,
-    val icon: SubjectIcon,
-    val color: Color,
-)
+@Composable
+fun PomodoroTimerScreen(
+    viewModel: PomodoroTimerViewModel,
+    modifier: Modifier = Modifier,
+) {
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
 
-private enum class SubjectIcon {
-    Trend,
-    Spark,
-    Play,
-    Dot,
+    LaunchedEffect(viewModel) {
+        viewModel.events.collect { event ->
+            when (event) {
+                PomodoroTimerEvent.StartStudyRequested -> Unit
+            }
+        }
+    }
+
+    PomodoroTimerContent(
+        state = uiState,
+        onShowAddSubject = viewModel::showAddSubjectDialog,
+        onDismissAddSubject = viewModel::dismissAddSubjectDialog,
+        onNewSubjectNameChange = viewModel::updateNewSubjectName,
+        onIconSelected = viewModel::selectIcon,
+        onAddSubject = viewModel::addSubject,
+        onStartStudy = viewModel::startStudy,
+        modifier = modifier,
+    )
 }
 
 @Composable
-fun PomodorotimerScreen(
+private fun PomodoroTimerContent(
+    state: PomodoroTimerState,
+    onShowAddSubject: () -> Unit,
+    onDismissAddSubject: () -> Unit,
+    onNewSubjectNameChange: (String) -> Unit,
+    onIconSelected: (SubjectIcon) -> Unit,
+    onAddSubject: () -> Unit,
+    onStartStudy: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val colors = PomodoroTheme.colors
     val spacing = PomodoroTheme.spacing
     val typography = PomodoroTheme.typography
     val scrollState = rememberScrollState()
-    var isAddSubjectDialogShown by remember { mutableStateOf(false) }
-    val subjectIcons = remember {
-        listOf(SubjectIcon.Trend, SubjectIcon.Spark, SubjectIcon.Play, SubjectIcon.Dot)
-    }
-    val subjectColors = listOf(
-        colors.accentBlue,
-        colors.accentGreen,
-        colors.accentYellow,
-        colors.accentOrange,
-        Color(0xFFBDA0F6),
-    )
-    val addedSubjects = remember { mutableStateListOf<SubjectUiModel>() }
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
         containerColor = colors.background,
-        contentWindowInsets = WindowInsets(0.dp),
-        bottomBar = {
-        },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        bottomBar = {},
     ) { paddingValues ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -98,7 +107,7 @@ fun PomodorotimerScreen(
                 .padding(horizontal = spacing.xLarge, vertical = spacing.large),
         ) {
             Text(
-                text = "Good morning!",
+                text = stringResource(R.string.pomodoro_greeting_good_morning),
                 style = typography.display,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
@@ -107,7 +116,7 @@ fun PomodorotimerScreen(
             Spacer(modifier = Modifier.height(spacing.xLarge))
 
             Text(
-                text = "Pick a subject!",
+                text = stringResource(R.string.pomodoro_pick_subject),
                 style = typography.title,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
@@ -115,117 +124,16 @@ fun PomodorotimerScreen(
 
             Spacer(modifier = Modifier.height(spacing.medium))
 
-            SubjectCard(
-                title = "Vibe Coding",
-                time = "00:00:00",
-                backgroundColor = colors.accentBlue,
-                icon = SubjectIcon.Trend,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
-            )
-
-            Spacer(modifier = Modifier.height(spacing.small))
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(spacing.small),
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                SubjectCard(
-                    title = "Math",
-                    time = "00:00:00",
-                    backgroundColor = Color(0xFFBDA0F6),
-                    icon = SubjectIcon.Trend,
-                    showChart = true,
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(92.dp),
-                )
-                SubjectCard(
-                    title = "Math",
-                    time = "00:00:00",
-                    backgroundColor = colors.accentGreen,
-                    icon = SubjectIcon.Trend,
-                    showChart = true,
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(92.dp),
-                )
-            }
-
-            Spacer(modifier = Modifier.height(spacing.small))
-
-            SubjectCard(
-                title = "Vibe Coding",
-                time = "00:00:00",
-                backgroundColor = colors.accentOrange,
-                icon = SubjectIcon.Spark,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(60.dp),
-            )
-
-            Spacer(modifier = Modifier.height(spacing.small))
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(spacing.small),
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                SubjectCard(
-                    title = "Math",
-                    time = "00:00:00",
-                    backgroundColor = colors.accentGreen,
-                    icon = SubjectIcon.Trend,
-                    showChart = true,
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(92.dp),
-                )
-                SubjectCard(
-                    title = "Math",
-                    time = "00:00:00",
-                    backgroundColor = colors.accentYellow,
-                    icon = SubjectIcon.Trend,
-                    showChart = true,
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(92.dp),
-                )
-            }
-
-            addedSubjects.chunked(2).forEach { rowSubjects ->
-                Spacer(modifier = Modifier.height(spacing.small))
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(spacing.small),
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    rowSubjects.forEach { subject ->
-                        SubjectCard(
-                            title = subject.title,
-                            time = "00:00:00",
-                            backgroundColor = subject.color,
-                            icon = subject.icon,
-                            showChart = true,
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(92.dp),
-                        )
-                    }
-
-                    if (rowSubjects.size == 1) {
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
-                }
-            }
+            SubjectGrid(subjects = state.subjects)
 
             Spacer(modifier = Modifier.height(spacing.small))
 
             TodayGoalCard(
-                progress = 0.38f,
+                progress = state.goalProgress,
+                goalText = state.goalText,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(52.dp),
+                    .height(dimensionResource(DesignSystemR.dimen.pomodoro_timer_goal_card_height)),
             )
 
             Spacer(modifier = Modifier.height(spacing.small))
@@ -235,41 +143,90 @@ fun PomodorotimerScreen(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 StartStudyButton(
+                    onClick = onStartStudy,
                     modifier = Modifier
-                        .widthIn(min = 148.dp)
-                        .height(38.dp),
+                        .widthIn(min = dimensionResource(DesignSystemR.dimen.pomodoro_timer_start_button_min_width))
+                        .height(dimensionResource(DesignSystemR.dimen.pomodoro_timer_control_height)),
                 )
 
                 AddSubjectButton(
-                    onClick = { isAddSubjectDialogShown = true },
-                    modifier = Modifier.size(38.dp),
+                    onClick = onShowAddSubject,
+                    modifier = Modifier.size(dimensionResource(DesignSystemR.dimen.pomodoro_timer_add_button_size)),
                 )
             }
         }
     }
 
-    if (isAddSubjectDialogShown) {
+    if (state.isAddSubjectDialogShown) {
         AddSubjectDialog(
-            icons = subjectIcons,
-            onDismiss = { isAddSubjectDialogShown = false },
-            onAddSubject = { title, iconIndex ->
-                addedSubjects += SubjectUiModel(
-                    title = title,
-                    icon = subjectIcons[iconIndex],
-                    color = subjectColors[addedSubjects.size % subjectColors.size],
-                )
-                isAddSubjectDialogShown = false
-            },
+            subjectName = state.newSubjectName,
+            selectedIcon = state.selectedIcon,
+            onSubjectNameChange = onNewSubjectNameChange,
+            onIconSelected = onIconSelected,
+            onDismiss = onDismissAddSubject,
+            onAddSubject = onAddSubject,
         )
     }
 }
 
 @Composable
+private fun SubjectGrid(
+    subjects: List<PomodoroSubjectUiModel>,
+) {
+    val spacing = PomodoroTheme.spacing
+    var index = 0
+
+    while (index < subjects.size) {
+        val subject = subjects[index]
+
+        if (index > 0) {
+            Spacer(modifier = Modifier.height(spacing.small))
+        }
+
+        if (subject.isWide) {
+            SubjectCard(
+                subject = subject,
+                showChart = false,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(dimensionResource(DesignSystemR.dimen.pomodoro_timer_subject_wide_height)),
+            )
+            index += 1
+        } else {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(spacing.small),
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                SubjectCard(
+                    subject = subject,
+                    showChart = true,
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(dimensionResource(DesignSystemR.dimen.pomodoro_timer_subject_card_height)),
+                )
+
+                val nextSubject = subjects.getOrNull(index + 1)
+                if (nextSubject != null && !nextSubject.isWide) {
+                    SubjectCard(
+                        subject = nextSubject,
+                        showChart = true,
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(dimensionResource(DesignSystemR.dimen.pomodoro_timer_subject_card_height)),
+                    )
+                    index += 2
+                } else {
+                    Spacer(modifier = Modifier.weight(1f))
+                    index += 1
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun SubjectCard(
-    title: String,
-    time: String,
-    backgroundColor: Color,
-    icon: SubjectIcon,
+    subject: PomodoroSubjectUiModel,
     modifier: Modifier = Modifier,
     showChart: Boolean = false,
 ) {
@@ -278,7 +235,7 @@ private fun SubjectCard(
 
     BaseCard(
         modifier = modifier,
-        backgroundColor = backgroundColor,
+        backgroundColor = subject.color.toComposeColor(),
         contentPadding = PaddingValues(horizontal = spacing.medium, vertical = spacing.small),
     ) {
         if (showChart) {
@@ -287,18 +244,21 @@ private fun SubjectCard(
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxSize(),
             ) {
-                SubjectIconView(icon = icon, modifier = Modifier.size(46.dp))
+                SubjectIconView(
+                    icon = subject.icon,
+                    modifier = Modifier.size(dimensionResource(DesignSystemR.dimen.pomodoro_timer_subject_icon_size)),
+                )
                 Spacer(modifier = Modifier.height(spacing.small))
-                Text(text = title, style = typography.titleSmall, textAlign = TextAlign.Center)
-                Text(text = time, style = typography.body, textAlign = TextAlign.Center)
+                Text(text = subject.title, style = typography.titleSmall, textAlign = TextAlign.Center)
+                Text(text = subject.time, style = typography.body, textAlign = TextAlign.Center)
             }
         } else {
             Column(
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxSize(),
             ) {
-                Text(text = title, style = typography.titleSmall)
-                Text(text = time, style = typography.body)
+                Text(text = subject.title, style = typography.titleSmall)
+                Text(text = subject.time, style = typography.body)
             }
         }
     }
@@ -307,6 +267,7 @@ private fun SubjectCard(
 @Composable
 private fun TodayGoalCard(
     progress: Float,
+    goalText: String,
     modifier: Modifier = Modifier,
 ) {
     val colors = PomodoroTheme.colors
@@ -324,7 +285,7 @@ private fun TodayGoalCard(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize(),
         ) {
-            Text(text = "Today's goal", style = typography.titleSmall)
+            Text(text = stringResource(R.string.pomodoro_todays_goal), style = typography.titleSmall)
             Row(
                 horizontalArrangement = Arrangement.spacedBy(spacing.medium),
                 verticalAlignment = Alignment.CenterVertically,
@@ -333,10 +294,10 @@ private fun TodayGoalCard(
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .height(16.dp)
+                        .height(dimensionResource(DesignSystemR.dimen.pomodoro_timer_goal_progress_height))
                         .clip(shapes.control)
                         .background(colors.background)
-                        .border(2.dp, colors.border, shapes.control),
+                        .border(dimensionResource(DesignSystemR.dimen.pomodoro_timer_border_width), colors.border, shapes.control),
                 ) {
                     Box(
                         modifier = Modifier
@@ -346,7 +307,7 @@ private fun TodayGoalCard(
                     )
                 }
 
-                Text(text = "3/5h", style = typography.titleSmall)
+                Text(text = goalText, style = typography.titleSmall)
             }
         }
     }
@@ -354,6 +315,7 @@ private fun TodayGoalCard(
 
 @Composable
 private fun StartStudyButton(
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val colors = PomodoroTheme.colors
@@ -367,12 +329,17 @@ private fun StartStudyButton(
         modifier = modifier
             .clip(shapes.control)
             .background(colors.accentGreen, shapes.control)
-            .border(2.dp, colors.border, shapes.control)
+            .border(dimensionResource(DesignSystemR.dimen.pomodoro_timer_border_width), colors.border, shapes.control)
+            .clickable(onClick = onClick)
             .padding(horizontal = spacing.large),
     ) {
-        Text(text = "Start Study", style = typography.titleSmall)
+        Text(text = stringResource(R.string.pomodoro_start_study), style = typography.titleSmall)
         Spacer(modifier = Modifier.width(spacing.small))
-        PlayIcon(modifier = Modifier.size(14.dp), color = colors.border)
+        VectorAssetIcon(
+            iconResId = R.drawable.ic_play_arrow_24,
+            modifier = Modifier.size(dimensionResource(DesignSystemR.dimen.pomodoro_timer_icon_small)),
+            tint = colors.border,
+        )
     }
 }
 
@@ -388,26 +355,31 @@ private fun AddSubjectButton(
         modifier = modifier
             .clip(shapes.circle)
             .background(colors.accentYellow, shapes.circle)
-            .border(2.dp, colors.border, shapes.circle)
+            .border(dimensionResource(DesignSystemR.dimen.pomodoro_timer_border_width), colors.border, shapes.circle)
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
-        PlusIcon(modifier = Modifier.size(18.dp), color = colors.border)
+        VectorAssetIcon(
+            iconResId = R.drawable.ic_add_24,
+            modifier = Modifier.size(dimensionResource(DesignSystemR.dimen.pomodoro_timer_icon_medium)),
+            tint = colors.border,
+        )
     }
 }
 
 @Composable
 private fun AddSubjectDialog(
-    icons: List<SubjectIcon>,
+    subjectName: String,
+    selectedIcon: SubjectIcon,
+    onSubjectNameChange: (String) -> Unit,
+    onIconSelected: (SubjectIcon) -> Unit,
     onDismiss: () -> Unit,
-    onAddSubject: (String, Int) -> Unit,
+    onAddSubject: () -> Unit,
 ) {
     val colors = PomodoroTheme.colors
     val spacing = PomodoroTheme.spacing
     val typography = PomodoroTheme.typography
     val shapes = PomodoroTheme.shapes
-    var subjectName by remember { mutableStateOf("") }
-    var selectedIconIndex by remember { mutableIntStateOf(0) }
     val trimmedName = subjectName.trim()
 
     Dialog(onDismissRequest = onDismiss) {
@@ -420,19 +392,19 @@ private fun AddSubjectDialog(
                 verticalArrangement = Arrangement.spacedBy(spacing.medium),
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(text = "Add subject", style = typography.title)
+                Text(text = stringResource(R.string.pomodoro_add_subject_title), style = typography.title)
 
                 BasicTextField(
                     value = subjectName,
-                    onValueChange = { subjectName = it },
+                    onValueChange = onSubjectNameChange,
                     singleLine = true,
                     textStyle = typography.titleSmall.copy(color = colors.textPrimary),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(48.dp)
+                        .height(dimensionResource(DesignSystemR.dimen.pomodoro_timer_text_field_height))
                         .clip(shapes.control)
                         .background(colors.surface, shapes.control)
-                        .border(2.dp, colors.border, shapes.control)
+                        .border(dimensionResource(DesignSystemR.dimen.pomodoro_timer_border_width), colors.border, shapes.control)
                         .padding(horizontal = spacing.medium, vertical = spacing.medium),
                     decorationBox = { innerTextField ->
                         Box(
@@ -441,7 +413,7 @@ private fun AddSubjectDialog(
                         ) {
                             if (subjectName.isBlank()) {
                                 Text(
-                                    text = "Subject name",
+                                    text = stringResource(R.string.pomodoro_subject_name_hint),
                                     style = typography.titleSmall.copy(color = colors.textSecondary),
                                 )
                             }
@@ -450,20 +422,20 @@ private fun AddSubjectDialog(
                     },
                 )
 
-                Text(text = "Choose icon", style = typography.titleSmall)
+                Text(text = stringResource(R.string.pomodoro_choose_icon), style = typography.titleSmall)
 
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(spacing.small),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
-                    icons.forEachIndexed { index, icon ->
+                    SubjectIcon.entries.forEach { icon ->
                         SubjectIconChoice(
                             icon = icon,
-                            selected = selectedIconIndex == index,
-                            onClick = { selectedIconIndex = index },
+                            selected = selectedIcon == icon,
+                            onClick = { onIconSelected(icon) },
                             modifier = Modifier
                                 .weight(1f)
-                                .height(54.dp),
+                                .height(dimensionResource(DesignSystemR.dimen.pomodoro_timer_icon_choice_height)),
                         )
                     }
                 }
@@ -473,21 +445,21 @@ private fun AddSubjectDialog(
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     DialogActionButton(
-                        text = "Cancel",
+                        text = stringResource(R.string.pomodoro_cancel),
                         backgroundColor = colors.surface,
                         onClick = onDismiss,
                         modifier = Modifier
                             .weight(1f)
-                            .height(38.dp),
+                            .height(dimensionResource(DesignSystemR.dimen.pomodoro_timer_control_height)),
                     )
                     DialogActionButton(
-                        text = "Add",
+                        text = stringResource(R.string.pomodoro_add),
                         backgroundColor = colors.accentGreen,
                         enabled = trimmedName.isNotBlank(),
-                        onClick = { onAddSubject(trimmedName, selectedIconIndex) },
+                        onClick = onAddSubject,
                         modifier = Modifier
                             .weight(1f)
-                            .height(38.dp),
+                            .height(dimensionResource(DesignSystemR.dimen.pomodoro_timer_control_height)),
                     )
                 }
             }
@@ -510,11 +482,14 @@ private fun SubjectIconChoice(
         modifier = modifier
             .clip(shapes.control)
             .background(backgroundColor, shapes.control)
-            .border(2.dp, colors.border, shapes.control)
+            .border(dimensionResource(DesignSystemR.dimen.pomodoro_timer_border_width), colors.border, shapes.control)
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
-        SubjectIconView(icon = icon, modifier = Modifier.size(26.dp))
+        SubjectIconView(
+            icon = icon,
+            modifier = Modifier.size(dimensionResource(DesignSystemR.dimen.pomodoro_timer_icon_choice_size)),
+        )
     }
 }
 
@@ -537,7 +512,7 @@ private fun DialogActionButton(
         modifier = modifier
             .clip(shapes.control)
             .background(resolvedBackground, shapes.control)
-            .border(2.dp, colors.border, shapes.control)
+            .border(dimensionResource(DesignSystemR.dimen.pomodoro_timer_border_width), colors.border, shapes.control)
             .clickable(enabled = enabled, onClick = onClick)
             .padding(horizontal = spacing.medium),
         contentAlignment = Alignment.Center,
@@ -545,8 +520,6 @@ private fun DialogActionButton(
         Text(text = text, style = typography.titleSmall.copy(color = textColor))
     }
 }
-
-
 
 @Composable
 private fun SubjectIconView(
@@ -556,135 +529,67 @@ private fun SubjectIconView(
     val colors = PomodoroTheme.colors
 
     when (icon) {
-        SubjectIcon.Trend -> TrendIcon(modifier = modifier, color = colors.border)
-        SubjectIcon.Spark -> SparkIcon(modifier = modifier, color = colors.border)
-        SubjectIcon.Play -> PlayIcon(modifier = modifier, color = colors.border)
-        SubjectIcon.Dot -> Box(
-            modifier = modifier
-                .padding(8.dp)
-                .clip(PomodoroTheme.shapes.circle)
-                .background(colors.border),
+        SubjectIcon.Trend -> VectorAssetIcon(
+            iconResId = R.drawable.ic_show_chart_24,
+            modifier = modifier,
+            tint = colors.border,
+        )
+        SubjectIcon.Spark -> VectorAssetIcon(
+            iconResId = R.drawable.ic_asterisk_24,
+            modifier = modifier,
+            tint = colors.border,
+        )
+        SubjectIcon.Play -> VectorAssetIcon(
+            iconResId = R.drawable.ic_play_arrow_24,
+            modifier = modifier,
+            tint = colors.border,
+        )
+        SubjectIcon.Dot -> VectorAssetIcon(
+            iconResId = R.drawable.ic_target_24,
+            modifier = modifier,
+            tint = colors.border,
         )
     }
 }
 
 @Composable
-private fun TrendIcon(
+private fun VectorAssetIcon(
+    iconResId: Int,
     modifier: Modifier = Modifier,
-    color: Color = PomodoroTheme.colors.border,
+    tint: Color = PomodoroTheme.colors.border,
 ) {
-    Canvas(modifier = modifier) {
-        val strokeWidth = 2.4.dp.toPx()
-        val path = Path().apply {
-            moveTo(size.width * 0.12f, size.height * 0.72f)
-            lineTo(size.width * 0.42f, size.height * 0.42f)
-            lineTo(size.width * 0.58f, size.height * 0.58f)
-            lineTo(size.width * 0.86f, size.height * 0.30f)
-        }
-        drawPath(
-            path = path,
-            color = color,
-            style = Stroke(width = strokeWidth, cap = StrokeCap.Round),
-        )
-        drawLine(
-            color = color,
-            start = Offset(size.width * 0.86f, size.height * 0.30f),
-            end = Offset(size.width * 0.86f, size.height * 0.52f),
-            strokeWidth = strokeWidth,
-            cap = StrokeCap.Round,
-        )
-        drawLine(
-            color = color,
-            start = Offset(size.width * 0.86f, size.height * 0.30f),
-            end = Offset(size.width * 0.64f, size.height * 0.30f),
-            strokeWidth = strokeWidth,
-            cap = StrokeCap.Round,
-        )
-    }
+    Icon(
+        painter = painterResource(id = iconResId),
+        contentDescription = null,
+        tint = tint,
+        modifier = modifier,
+    )
 }
 
 @Composable
-private fun PlusIcon(
-    modifier: Modifier = Modifier,
-    color: Color,
-) {
-    Canvas(modifier = modifier) {
-        val strokeWidth = 2.4.dp.toPx()
-        drawLine(
-            color = color,
-            start = Offset(size.width * 0.50f, size.height * 0.12f),
-            end = Offset(size.width * 0.50f, size.height * 0.88f),
-            strokeWidth = strokeWidth,
-            cap = StrokeCap.Round,
-        )
-        drawLine(
-            color = color,
-            start = Offset(size.width * 0.12f, size.height * 0.50f),
-            end = Offset(size.width * 0.88f, size.height * 0.50f),
-            strokeWidth = strokeWidth,
-            cap = StrokeCap.Round,
-        )
-    }
-}
-
-@Composable
-private fun PlayIcon(
-    modifier: Modifier = Modifier,
-    color: Color,
-) {
-    Canvas(modifier = modifier) {
-        val path = Path().apply {
-            moveTo(size.width * 0.25f, size.height * 0.12f)
-            lineTo(size.width * 0.25f, size.height * 0.88f)
-            lineTo(size.width * 0.86f, size.height * 0.50f)
-            close()
-        }
-        drawPath(path = path, color = color)
-    }
-}
-
-@Composable
-private fun SparkIcon(
-    modifier: Modifier = Modifier,
-    color: Color,
-) {
-    Canvas(modifier = modifier) {
-        val strokeWidth = 1.8.dp.toPx()
-        drawLine(
-            color = color,
-            start = Offset(size.width * 0.50f, 0f),
-            end = Offset(size.width * 0.50f, size.height),
-            strokeWidth = strokeWidth,
-            cap = StrokeCap.Round,
-        )
-        drawLine(
-            color = color,
-            start = Offset(0f, size.height * 0.50f),
-            end = Offset(size.width, size.height * 0.50f),
-            strokeWidth = strokeWidth,
-            cap = StrokeCap.Round,
-        )
-        drawLine(
-            color = color,
-            start = Offset(size.width * 0.18f, size.height * 0.18f),
-            end = Offset(size.width * 0.82f, size.height * 0.82f),
-            strokeWidth = strokeWidth,
-            cap = StrokeCap.Round,
-        )
-        drawLine(
-            color = color,
-            start = Offset(size.width * 0.82f, size.height * 0.18f),
-            end = Offset(size.width * 0.18f, size.height * 0.82f),
-            strokeWidth = strokeWidth,
-            cap = StrokeCap.Round,
-        )
+private fun SubjectColor.toComposeColor(): Color {
+    val colors = PomodoroTheme.colors
+    return when (this) {
+        SubjectColor.Blue -> colors.accentBlue
+        SubjectColor.Green -> colors.accentGreen
+        SubjectColor.Yellow -> colors.accentYellow
+        SubjectColor.Orange -> colors.accentOrange
+        SubjectColor.Purple -> colors.accentPink
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun PomodorotimerScreenPreview() {
+private fun PomodoroTimerScreenPreview() {
     MySecondAwesomeAndroidProjectPomodoroTimerTheme {
-        PomodorotimerScreen()
+        PomodoroTimerContent(
+            state = PomodoroTimerState(),
+            onShowAddSubject = {},
+            onDismissAddSubject = {},
+            onNewSubjectNameChange = {},
+            onIconSelected = {},
+            onAddSubject = {},
+            onStartStudy = {},
+        )
     }
 }

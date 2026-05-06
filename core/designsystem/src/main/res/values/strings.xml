@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="navigation_timer">Timer</string>
+    <string name="navigation_leaders">Leaders</string>
+    <string name="navigation_groups">Groups</string>
+</resources>

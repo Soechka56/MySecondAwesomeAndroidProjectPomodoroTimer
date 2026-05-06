@@ -4,8 +4,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import com.soechka1.designsystem.R
 
 @Immutable
 data class PomodoroShapeTokens(
@@ -14,14 +16,16 @@ data class PomodoroShapeTokens(
     val circle: Shape,
 )
 
+@Composable
 internal fun pomodoroShapes() = PomodoroShapeTokens(
-    card = RoundedCornerShape(24.dp),
-    control = RoundedCornerShape(18.dp),
+    card = RoundedCornerShape(dimensionResource(R.dimen.pomodoro_shape_card)),
+    control = RoundedCornerShape(dimensionResource(R.dimen.pomodoro_shape_control)),
     circle = CircleShape,
 )
 
+@Composable
 internal fun materialShapes() = Shapes(
-    small = RoundedCornerShape(18.dp),
-    medium = RoundedCornerShape(24.dp),
-    large = RoundedCornerShape(24.dp),
+    small = RoundedCornerShape(dimensionResource(R.dimen.pomodoro_shape_material_small)),
+    medium = RoundedCornerShape(dimensionResource(R.dimen.pomodoro_shape_material_medium)),
+    large = RoundedCornerShape(dimensionResource(R.dimen.pomodoro_shape_material_large)),
 )

@@ -14,9 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.soechka1.designsystem.theme.PomodoroTheme
 import com.soechka1.designsystem.R
 import com.soechka1.designsystem.target.getDeviceUiConfig
@@ -30,12 +31,13 @@ data class NavigationItem(
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun MyExpressiveNavigation(
-    navigationItems: List<NavigationItem> = listOf(
-        NavigationItem("Timer", R.drawable.ic_play),
-        NavigationItem("Leaders", R.drawable.ic_leaders),
-        NavigationItem("Groups", R.drawable.ic_groups)
-    )
+    navigationItems: List<NavigationItem>? = null,
 ) {
+    val resolvedNavigationItems = navigationItems ?: listOf(
+        NavigationItem(stringResource(R.string.navigation_timer), R.drawable.ic_play),
+        NavigationItem(stringResource(R.string.navigation_leaders), R.drawable.ic_leaders),
+        NavigationItem(stringResource(R.string.navigation_groups), R.drawable.ic_groups)
+    )
     val adaptiveUi = getDeviceUiConfig()
     val pomodoroColors = PomodoroTheme.colors
     
@@ -44,10 +46,10 @@ fun MyExpressiveNavigation(
     Box(contentAlignment = Alignment.Center) {
         ShortNavigationBar(
             modifier = Modifier
-                .clip(RoundedCornerShape(32.dp)),
+                .clip(RoundedCornerShape(dimensionResource(R.dimen.pomodoro_spacing_xx_large))),
             containerColor = pomodoroColors.surface,
         ) {
-            navigationItems.forEachIndexed { index, item ->
+            resolvedNavigationItems.forEachIndexed { index, item ->
                 ShortNavigationBarItem(
                     selected = selectedIndex == index,
                     onClick = { selectedIndex = index },

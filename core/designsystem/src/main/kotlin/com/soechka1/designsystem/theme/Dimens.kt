@@ -1,8 +1,10 @@
 package com.soechka1.designsystem.theme
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
+import com.soechka1.designsystem.R
 
 @Immutable
 data class PomodoroSpacingTokens(
@@ -14,11 +16,12 @@ data class PomodoroSpacingTokens(
     val xxLarge: Dp,
 )
 
-internal val DefaultPomodoroSpacing = PomodoroSpacingTokens(
-    xSmall = 4.dp,
-    small = 8.dp,
-    medium = 12.dp,
-    large = 16.dp,
-    xLarge = 24.dp,
-    xxLarge = 32.dp,
+@Composable
+internal fun defaultPomodoroSpacing() = PomodoroSpacingTokens(
+    xSmall = dimensionResource(R.dimen.pomodoro_spacing_x_small),
+    small = dimensionResource(R.dimen.pomodoro_spacing_small),
+    medium = dimensionResource(R.dimen.pomodoro_spacing_medium),
+    large = dimensionResource(R.dimen.pomodoro_spacing_large),
+    xLarge = dimensionResource(R.dimen.pomodoro_spacing_x_large),
+    xxLarge = dimensionResource(R.dimen.pomodoro_spacing_xx_large),
 )

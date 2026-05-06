@@ -35,12 +35,10 @@ fun getDeviceUiConfig(): DeviceUiConfig {
         }
     }
 
-    val sizes = remember(type) {
-        when (type) {
-            DeviceTypeEnum.Compact -> SizesCompact
-            DeviceTypeEnum.Medium -> SizesMedium
-            DeviceTypeEnum.Expanded -> SizesExpanded
-        }
+    val sizes = when (type) {
+        DeviceTypeEnum.Compact -> SizesCompact
+        DeviceTypeEnum.Medium -> SizesMedium
+        DeviceTypeEnum.Expanded -> SizesExpanded
     }
 
     return remember(type, sizes, widthDp, heightDp) {

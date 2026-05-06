@@ -2,12 +2,15 @@ package com.soechka1.designsystem.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.TextUnit
 import com.soechka1.designsystem.R
 
 
@@ -46,62 +49,76 @@ data class PomodoroTypographyTokens(
     val timerValue: TextStyle,
 )
 
+@Composable
+private fun textUnitResource(id: Int): TextUnit {
+    val resources = LocalContext.current.resources
+    val density = LocalDensity.current
+    return with(density) {
+        resources.getDimension(id).toSp()
+    }
+}
+
+@Composable
 internal fun pomodoroTypography(colors: PomodoroColorPalette) = PomodoroTypographyTokens(
     display = TextStyle(
         fontFamily = BagelFontFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 32.sp,
-        lineHeight = 36.sp,
+        fontSize = textUnitResource(R.dimen.pomodoro_type_display_font_size),
+        lineHeight = textUnitResource(R.dimen.pomodoro_type_display_line_height),
         color = colors.textPrimary,
     ),
     title = TextStyle(
         fontFamily = BagelFontFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 20.sp,
-        lineHeight = 24.sp,
+        fontSize = textUnitResource(R.dimen.pomodoro_type_title_font_size),
+        lineHeight = textUnitResource(R.dimen.pomodoro_type_title_line_height),
         color = colors.textPrimary,
     ),
     titleSmall = TextStyle(
         fontFamily = BagelFontFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 20.sp,
+        fontSize = textUnitResource(R.dimen.pomodoro_type_title_small_font_size),
+        lineHeight = textUnitResource(R.dimen.pomodoro_type_title_small_line_height),
         color = colors.textPrimary,
     ),
     body = TextStyle(
         fontFamily = YrsaFontFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 15.sp,
-        lineHeight = 20.sp,
+        fontSize = textUnitResource(R.dimen.pomodoro_type_body_font_size),
+        lineHeight = textUnitResource(R.dimen.pomodoro_type_body_line_height),
         color = colors.textSecondary,
     ),
     bodyLarge = TextStyle(
         fontFamily = YrsaFontFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 22.sp,
+        fontSize = textUnitResource(R.dimen.pomodoro_type_body_large_font_size),
+        lineHeight = textUnitResource(R.dimen.pomodoro_type_body_large_line_height),
         color = colors.textSecondary,
     ),
     label = TextStyle(
         fontFamily = AksharFontFamily,
         fontWeight = FontWeight.Medium,
-        fontSize = 16.sp,
-        lineHeight = 18.sp,
+        fontSize = textUnitResource(R.dimen.pomodoro_type_label_font_size),
+        lineHeight = textUnitResource(R.dimen.pomodoro_type_label_line_height),
         color = colors.textPrimary,
     ),
     timerValue = TextStyle(
         fontFamily = YrsaFontFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 24.sp,
-        lineHeight = 28.sp,
+        fontSize = textUnitResource(R.dimen.pomodoro_type_timer_value_font_size),
+        lineHeight = textUnitResource(R.dimen.pomodoro_type_timer_value_line_height),
         color = colors.textSecondary,
     ),
 )
 
-internal fun materialTypography(colors: PomodoroColorPalette) = Typography(
-    displayLarge = pomodoroTypography(colors).display,
-    titleLarge = pomodoroTypography(colors).title,
-    bodyLarge = pomodoroTypography(colors).bodyLarge,
-    bodyMedium = pomodoroTypography(colors).body,
-    labelLarge = pomodoroTypography(colors).label,
-)
+@Composable
+internal fun materialTypography(colors: PomodoroColorPalette): Typography {
+    val typography = pomodoroTypography(colors)
+    return Typography(
+        displayLarge = typography.display,
+        titleLarge = typography.title,
+        bodyLarge = typography.bodyLarge,
+        bodyMedium = typography.body,
+        labelLarge = typography.label,
+    )
+}

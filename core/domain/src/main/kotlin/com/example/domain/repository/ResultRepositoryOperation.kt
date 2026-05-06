@@ -10,6 +10,7 @@ sealed interface OperationError {
     data object Unauthorized : OperationError
     data object Forbidden : OperationError
     data object NotFound : OperationError
+    data object EmptyAuthTokenResponse : OperationError
     data class Validation(val message: String) : OperationError
     data class Unknown(val message: String? = null) : OperationError
 }

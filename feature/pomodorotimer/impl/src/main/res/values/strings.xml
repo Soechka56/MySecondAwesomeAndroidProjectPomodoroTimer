@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pomodoro_greeting_good_morning">Good morning!</string>
+    <string name="pomodoro_pick_subject">Pick a subject!</string>
+    <string name="pomodoro_todays_goal">Today\'s goal</string>
+    <string name="pomodoro_start_study">Start Study</string>
+    <string name="pomodoro_add_subject_title">Add subject</string>
+    <string name="pomodoro_subject_name_hint">Subject name</string>
+    <string name="pomodoro_choose_icon">Choose icon</string>
+    <string name="pomodoro_cancel">Cancel</string>
+    <string name="pomodoro_add">Add</string>
+</resources>

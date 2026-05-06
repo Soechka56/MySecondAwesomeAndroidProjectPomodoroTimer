@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.navigation.EntryProviderInstaller
 import com.example.pomodorotimer.api.PomodoroTimerDependencies
 import com.example.pomodorotimer.api.PomodoroTimerNavKey
+import com.example.pomodorotimer.impl.PomodoroTimerScreen
 import com.example.pomodorotimer.impl.PomodoroTimerViewModel
 import com.example.viewmodel.ViewModelFactoryModule
 import com.example.viewmodel.ViewModelKey
@@ -59,6 +60,10 @@ object PomodoroTimerEntryModule {
 
                 val viewModel: PomodoroTimerViewModel = viewModel(
                     factory = pomodoroTimerComponent.viewModelFactory()
+                )
+
+                PomodoroTimerScreen(
+                    viewModel = viewModel,
                 )
             }
         }

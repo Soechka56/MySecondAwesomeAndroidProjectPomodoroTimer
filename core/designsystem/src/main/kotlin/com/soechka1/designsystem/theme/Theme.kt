@@ -17,11 +17,15 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 
 private val LocalPomodoroColors = staticCompositionLocalOf { LightPomodoroColorPalette }
-private val LocalPomodoroTypography = staticCompositionLocalOf {
-    pomodoroTypography(LightPomodoroColorPalette)
+private val LocalPomodoroTypography = staticCompositionLocalOf<PomodoroTypographyTokens> {
+    error("Pomodoro typography is not provided")
 }
-private val LocalPomodoroShapes = staticCompositionLocalOf { pomodoroShapes() }
-private val LocalPomodoroSpacing = staticCompositionLocalOf { DefaultPomodoroSpacing }
+private val LocalPomodoroShapes = staticCompositionLocalOf<PomodoroShapeTokens> {
+    error("Pomodoro shapes are not provided")
+}
+private val LocalPomodoroSpacing = staticCompositionLocalOf<PomodoroSpacingTokens> {
+    error("Pomodoro spacing is not provided")
+}
 
 private fun lightPomodoroMaterialColors(colors: PomodoroColorPalette): ColorScheme = lightColorScheme(
     primary = colors.accentGreen,
@@ -85,6 +89,7 @@ fun MySecondAwesomeAndroidProjectPomodoroTimerTheme(
     val pomodoroColors = if (darkTheme) DarkPomodoroColorPalette else LightPomodoroColorPalette
     val typography = pomodoroTypography(pomodoroColors)
     val shapes = pomodoroShapes()
+    val spacing = defaultPomodoroSpacing()
 
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
@@ -100,7 +105,7 @@ fun MySecondAwesomeAndroidProjectPomodoroTimerTheme(
         LocalPomodoroColors provides pomodoroColors,
         LocalPomodoroTypography provides typography,
         LocalPomodoroShapes provides shapes,
-        LocalPomodoroSpacing provides DefaultPomodoroSpacing,
+        LocalPomodoroSpacing provides spacing,
     ) {
         MaterialExpressiveTheme(
             colorScheme = colorScheme,
