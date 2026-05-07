@@ -17,6 +17,11 @@ dependencies {
     // feature api
     implementation(project(":feature:auth:api"))
 
+    // bottom bar navigation
+    implementation(project(":feature:pomodorotimer:api"))
+    implementation(project(":feature:showleaders:api"))
+    implementation(project(":feature:studygroup:api"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

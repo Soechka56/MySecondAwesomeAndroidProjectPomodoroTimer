@@ -30,8 +30,8 @@ class UserDataMapper @Inject constructor() {
 
     fun mapToData(response: SuccessAuthResponse): LoginDataModel {
         return LoginDataModel(
-            accessToken = response.accessToken,
-            tokenType = response.tokenType,
+            accessToken = requireNotNull(response.accessToken),
+            tokenType = response.tokenType.orEmpty(),
         )
     }
 

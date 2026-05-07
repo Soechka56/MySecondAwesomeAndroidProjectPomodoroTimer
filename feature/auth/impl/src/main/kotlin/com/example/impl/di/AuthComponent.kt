@@ -9,6 +9,7 @@ import com.example.api.AuthNavKey
 import com.example.impl.AuthScreen
 import com.example.impl.AuthViewModel
 import com.example.navigation.EntryProviderInstaller
+import com.example.pomodorotimer.api.PomodoroTimerNavKey
 import com.example.viewmodel.ViewModelFactoryModule
 import com.example.viewmodel.ViewModelKey
 import dagger.Binds
@@ -67,7 +68,7 @@ object AuthEntryModule {
                 AuthScreen(
                     viewModel = viewModel,
                     onResult = {
-                        dependencies.navigator().goBack()
+                        dependencies.navigator().goTo(PomodoroTimerNavKey)
                     },
                 )
             }

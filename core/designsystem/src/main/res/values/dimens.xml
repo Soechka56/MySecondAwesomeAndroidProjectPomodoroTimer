@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="pomodoro_spacing_x_small">4dp</dimen>
+    <dimen name="pomodoro_spacing_small">8dp</dimen>
+    <dimen name="pomodoro_spacing_medium">12dp</dimen>
+    <dimen name="pomodoro_spacing_large">16dp</dimen>
+    <dimen name="pomodoro_spacing_x_large">24dp</dimen>
+    <dimen name="pomodoro_spacing_xx_large">32dp</dimen>
+
+    <dimen name="pomodoro_size_card_s_width">156dp</dimen>
+    <dimen name="pomodoro_size_card_s_height">132dp</dimen>
+    <dimen name="pomodoro_size_card_m_compact_width">220dp</dimen>
+    <dimen name="pomodoro_size_card_m_compact_height">168dp</dimen>
+    <dimen name="pomodoro_size_card_xl_compact_width">320dp</dimen>
+    <dimen name="pomodoro_size_card_xl_compact_height">120dp</dimen>
+    <dimen name="pomodoro_size_card_m_medium_width">240dp</dimen>
+    <dimen name="pomodoro_size_card_m_medium_height">176dp</dimen>
+    <dimen name="pomodoro_size_card_xl_medium_width">360dp</dimen>
+    <dimen name="pomodoro_size_card_xl_medium_height">132dp</dimen>
+    <dimen name="pomodoro_size_card_m_expanded_width">260dp</dimen>
+    <dimen name="pomodoro_size_card_m_expanded_height">184dp</dimen>
+    <dimen name="pomodoro_size_card_xl_expanded_width">420dp</dimen>
+    <dimen name="pomodoro_size_card_xl_expanded_height">140dp</dimen>
+    <dimen name="pomodoro_size_avatar">56dp</dimen>
+    <dimen name="pomodoro_size_icon_s">18dp</dimen>
+    <dimen name="pomodoro_size_icon_m">22dp</dimen>
+    <dimen name="pomodoro_size_icon_l">28dp</dimen>
+    <dimen name="pomodoro_size_min_touch_target">48dp</dimen>
+
+    <dimen name="pomodoro_timer_goal_card_height">52dp</dimen>
+    <dimen name="pomodoro_timer_start_button_min_width">148dp</dimen>
+    <dimen name="pomodoro_timer_control_height">38dp</dimen>
+    <dimen name="pomodoro_timer_add_button_size">38dp</dimen>
+    <dimen name="pomodoro_timer_subject_wide_height">60dp</dimen>
+    <dimen name="pomodoro_timer_subject_card_height">92dp</dimen>
+    <dimen name="pomodoro_timer_subject_icon_size">46dp</dimen>
+    <dimen name="pomodoro_timer_goal_progress_height">16dp</dimen>
+    <dimen name="pomodoro_timer_icon_small">14dp</dimen>
+    <dimen name="pomodoro_timer_icon_medium">18dp</dimen>
+    <dimen name="pomodoro_timer_text_field_height">48dp</dimen>
+    <dimen name="pomodoro_timer_icon_choice_height">54dp</dimen>
+    <dimen name="pomodoro_timer_icon_choice_size">26dp</dimen>
+    <dimen name="pomodoro_timer_border_width">2dp</dimen>
+
+    <dimen name="pomodoro_shape_card">24dp</dimen>
+    <dimen name="pomodoro_shape_control">18dp</dimen>
+    <dimen name="pomodoro_shape_material_small">18dp</dimen>
+    <dimen name="pomodoro_shape_material_medium">24dp</dimen>
+    <dimen name="pomodoro_shape_material_large">24dp</dimen>
+
+    <dimen name="pomodoro_type_display_font_size">32sp</dimen>
+    <dimen name="pomodoro_type_display_line_height">36sp</dimen>
+    <dimen name="pomodoro_type_title_font_size">20sp</dimen>
+    <dimen name="pomodoro_type_title_line_height">24sp</dimen>
+    <dimen name="pomodoro_type_title_small_font_size">16sp</dimen>
+    <dimen name="pomodoro_type_title_small_line_height">20sp</dimen>
+    <dimen name="pomodoro_type_body_font_size">15sp</dimen>
+    <dimen name="pomodoro_type_body_line_height">20sp</dimen>
+    <dimen name="pomodoro_type_body_large_font_size">16sp</dimen>
+    <dimen name="pomodoro_type_body_large_line_height">22sp</dimen>
+    <dimen name="pomodoro_type_label_font_size">16sp</dimen>
+    <dimen name="pomodoro_type_label_line_height">18sp</dimen>
+    <dimen name="pomodoro_type_timer_value_font_size">24sp</dimen>
+    <dimen name="pomodoro_type_timer_value_line_height">28sp</dimen>
+</resources>

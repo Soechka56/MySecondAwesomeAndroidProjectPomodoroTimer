@@ -41,8 +41,12 @@ fun AuthScreen(
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                is AuthScreenEvent.ShowAuthResult -> {}
-                is AuthScreenEvent.NavigateNext -> {}
+                is AuthScreenEvent.ShowAuthResult -> {
+                    if (event.result is AuthResult.Success) {
+                        onResult(event.result)
+                    }
+                }
+                is AuthScreenEvent.NavigateNext -> onResult(AuthResult.Success(uiState.authType))
             }
         }
     }

@@ -12,6 +12,7 @@ import com.example.domain.repository.OperationError
 import com.example.domain.repository.ResultOfOperation
 import com.example.impl.model.AuthScreenEvent
 import com.example.impl.model.AuthScreenState
+import com.example.navigation.Navigator
 import com.example.impl.model.AuthResult as TokenResult
 import com.feature.auth.impl.R
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -153,6 +154,7 @@ class AuthViewModel @Inject constructor(
                     )
 
                 )
+
             }
 
             is ResultOfOperation.Error -> {
@@ -203,6 +205,7 @@ class AuthViewModel @Inject constructor(
             OperationError.Unauthorized -> appContext.getString(R.string.auth_error_unauthorized)
             OperationError.Forbidden -> appContext.getString(R.string.auth_error_forbidden)
             OperationError.NotFound -> appContext.getString(R.string.auth_error_not_found)
+            OperationError.EmptyAuthTokenResponse -> appContext.getString(R.string.auth_error_empty_token)
             is OperationError.Validation -> appContext.getString(R.string.auth_error_validation)
             is OperationError.Unknown -> message
                 ?: appContext.getString(R.string.auth_error_unknown)

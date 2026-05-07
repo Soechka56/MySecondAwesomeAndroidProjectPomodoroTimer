@@ -1,9 +1,11 @@
 package com.soechka1.designsystem.theme
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.dp
+import com.soechka1.designsystem.R
 
 @Immutable
 data class PomodoroSizes(
@@ -20,25 +22,52 @@ data class PomodoroSizes(
 
     )
 
-val SizesCompact = PomodoroSizes(
-    cardS = DpSize(156.dp, 132.dp),
-    cardM = DpSize(220.dp, 168.dp),
-    cardXL = DpSize(320.dp, 120.dp),
+val SizesCompact: PomodoroSizes
+    @Composable
+    get() = PomodoroSizes(
+    cardS = DpSize(
+        dimensionResource(R.dimen.pomodoro_size_card_s_width),
+        dimensionResource(R.dimen.pomodoro_size_card_s_height),
+    ),
+    cardM = DpSize(
+        dimensionResource(R.dimen.pomodoro_size_card_m_compact_width),
+        dimensionResource(R.dimen.pomodoro_size_card_m_compact_height),
+    ),
+    cardXL = DpSize(
+        dimensionResource(R.dimen.pomodoro_size_card_xl_compact_width),
+        dimensionResource(R.dimen.pomodoro_size_card_xl_compact_height),
+    ),
 
-    avatar = 56.dp,
-    iconS = 18.dp,
-    iconM = 22.dp,
-    iconL = 28.dp,
+    avatar = dimensionResource(R.dimen.pomodoro_size_avatar),
+    iconS = dimensionResource(R.dimen.pomodoro_size_icon_s),
+    iconM = dimensionResource(R.dimen.pomodoro_size_icon_m),
+    iconL = dimensionResource(R.dimen.pomodoro_size_icon_l),
 
-    minTouchTarget = 48.dp
+    minTouchTarget = dimensionResource(R.dimen.pomodoro_size_min_touch_target)
 )
 
-val SizesMedium = SizesCompact.copy(
-    cardM = DpSize(240.dp, 176.dp),
-    cardXL = DpSize(360.dp, 132.dp),
-)
+val SizesMedium: PomodoroSizes
+    @Composable
+    get() = SizesCompact.copy(
+        cardM = DpSize(
+            dimensionResource(R.dimen.pomodoro_size_card_m_medium_width),
+            dimensionResource(R.dimen.pomodoro_size_card_m_medium_height),
+        ),
+        cardXL = DpSize(
+            dimensionResource(R.dimen.pomodoro_size_card_xl_medium_width),
+            dimensionResource(R.dimen.pomodoro_size_card_xl_medium_height),
+        ),
+    )
 
-val SizesExpanded = SizesCompact.copy(
-    cardM = DpSize(260.dp, 184.dp),
-    cardXL = DpSize(420.dp, 140.dp),
-)
+val SizesExpanded: PomodoroSizes
+    @Composable
+    get() = SizesCompact.copy(
+        cardM = DpSize(
+            dimensionResource(R.dimen.pomodoro_size_card_m_expanded_width),
+            dimensionResource(R.dimen.pomodoro_size_card_m_expanded_height),
+        ),
+        cardXL = DpSize(
+            dimensionResource(R.dimen.pomodoro_size_card_xl_expanded_width),
+            dimensionResource(R.dimen.pomodoro_size_card_xl_expanded_height),
+        ),
+    )

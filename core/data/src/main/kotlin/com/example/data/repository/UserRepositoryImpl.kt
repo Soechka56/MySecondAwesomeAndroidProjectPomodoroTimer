@@ -62,7 +62,21 @@ class UserRepositoryImpl @Inject constructor(
                 )
             )
 
-            authHandler(response)
+            val registrationResult = authHandler(response)
+            if (registrationResult is ResultOfOperation.Error &&
+                registrationResult.error == OperationError.EmptyAuthTokenResponse
+            ) {
+                authHandler(
+                    pomodoroApi.loginAccount(
+                        user = PostUserLoginData(
+                            email = email,
+                            password = password,
+                        )
+                    )
+                )
+            } else {
+                registrationResult
+            }
 
         } catch (throwable: Throwable) {
             throwable.toResultOfOperation()
@@ -113,6 +127,8 @@ class UserRepositoryImpl @Inject constructor(
                     val body = response.body()
                     if (body == null) {
                         ResultOfOperation.Error(OperationError.Unknown("Empty response body"))
+                    } else if (body.accessToken.isNullOrBlank()) {
+                        ResultOfOperation.Error(OperationError.EmptyAuthTokenResponse)
                     } else {
                         ResultOfOperation.Success(
                             data = userDataMapper.mapToDomain(
@@ -138,5 +154,3 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 }
-
-

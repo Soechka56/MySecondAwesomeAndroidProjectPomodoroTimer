@@ -8,6 +8,7 @@
     <string name="auth_error_unauthorized">пароль неверный или такого аккаунта нет ((</string>
     <string name="auth_error_forbidden">Доступ запрещен</string>
     <string name="auth_error_not_found">Ничего не найдено</string>
+    <string name="auth_error_empty_token">Сервер не вернул токен авторизации</string>
     <string name="auth_error_unknown">Неизвестная ошибка</string>
     <string name="auth_error_validation">проверьте поля на корректность</string>
 

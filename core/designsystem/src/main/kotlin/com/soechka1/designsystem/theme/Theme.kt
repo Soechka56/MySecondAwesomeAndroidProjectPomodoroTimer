@@ -3,7 +3,9 @@ package com.soechka1.designsystem.theme
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialExpressiveTheme
+import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -15,11 +17,15 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 
 private val LocalPomodoroColors = staticCompositionLocalOf { LightPomodoroColorPalette }
-private val LocalPomodoroTypography = staticCompositionLocalOf {
-    pomodoroTypography(LightPomodoroColorPalette)
+private val LocalPomodoroTypography = staticCompositionLocalOf<PomodoroTypographyTokens> {
+    error("Pomodoro typography is not provided")
 }
-private val LocalPomodoroShapes = staticCompositionLocalOf { pomodoroShapes() }
-private val LocalPomodoroSpacing = staticCompositionLocalOf { DefaultPomodoroSpacing }
+private val LocalPomodoroShapes = staticCompositionLocalOf<PomodoroShapeTokens> {
+    error("Pomodoro shapes are not provided")
+}
+private val LocalPomodoroSpacing = staticCompositionLocalOf<PomodoroSpacingTokens> {
+    error("Pomodoro spacing is not provided")
+}
 
 private fun lightPomodoroMaterialColors(colors: PomodoroColorPalette): ColorScheme = lightColorScheme(
     primary = colors.accentGreen,
@@ -74,6 +80,7 @@ object PomodoroTheme {
 }
 
 @Composable
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 fun MySecondAwesomeAndroidProjectPomodoroTimerTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false,
@@ -82,6 +89,7 @@ fun MySecondAwesomeAndroidProjectPomodoroTimerTheme(
     val pomodoroColors = if (darkTheme) DarkPomodoroColorPalette else LightPomodoroColorPalette
     val typography = pomodoroTypography(pomodoroColors)
     val shapes = pomodoroShapes()
+    val spacing = defaultPomodoroSpacing()
 
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
@@ -97,10 +105,11 @@ fun MySecondAwesomeAndroidProjectPomodoroTimerTheme(
         LocalPomodoroColors provides pomodoroColors,
         LocalPomodoroTypography provides typography,
         LocalPomodoroShapes provides shapes,
-        LocalPomodoroSpacing provides DefaultPomodoroSpacing,
+        LocalPomodoroSpacing provides spacing,
     ) {
-        MaterialTheme(
+        MaterialExpressiveTheme(
             colorScheme = colorScheme,
+            motionScheme = MotionScheme.expressive(),
             typography = materialTypography(pomodoroColors),
             shapes = materialShapes(),
             content = content,
