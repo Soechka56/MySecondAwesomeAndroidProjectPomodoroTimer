@@ -18,13 +18,11 @@ dependencies {
     implementation(project(path=":core:network"))
     implementation(project(path=":core:utils"))
     implementation(project(path=":core:common"))
+    implementation(project(path=":database:impl"))
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.core.ktx)
 
-    // скоро настанет твой час =)
-    //implementation(libs.room)
-    //implementation(libs.room.ktx)
 
     implementation(libs.x.datastore.preferences)
     implementation(libs.core.ktx)
