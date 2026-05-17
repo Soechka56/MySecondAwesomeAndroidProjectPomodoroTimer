@@ -18,7 +18,7 @@ dependencies {
     implementation(project(path=":core:network"))
     implementation(project(path=":core:utils"))
     implementation(project(path=":core:common"))
-    implementation(project(path=":database:impl"))
+    implementation(project(path=":core:database:impl"))
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.core.ktx)

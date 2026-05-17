@@ -16,6 +16,7 @@ dependencies {
 
     // feature api
     implementation(project(":feature:auth:api"))
+    implementation(project(":feature:studysession:api"))
 
     // bottom bar navigation
     implementation(project(":feature:pomodorotimer:api"))

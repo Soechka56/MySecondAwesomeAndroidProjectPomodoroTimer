@@ -10,6 +10,6 @@ android {
 dependencies {
     implementation(project(":core:database:api"))
 
-    implementation(libs.room.compiler)
-    implementation(libs.room.ktx)
+    //implementation(libs.room.compiler)
+    //implementation(libs.room.ktx)
 }
