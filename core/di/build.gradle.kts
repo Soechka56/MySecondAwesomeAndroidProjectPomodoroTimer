@@ -23,6 +23,9 @@ dependencies {
     implementation(project(":feature:pomodorotimer:api"))
     implementation(project(":feature:pomodorotimer:impl"))
 
+    implementation(project(":feature:studysession:api"))
+    implementation(project(":feature:studysession:impl"))
+
 
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
