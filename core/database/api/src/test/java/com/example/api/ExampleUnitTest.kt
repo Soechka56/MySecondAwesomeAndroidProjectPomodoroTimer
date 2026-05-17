@@ -1,4 +1,4 @@
-package com.example.studysession
+package com.example.api
 
 import org.junit.Test
 

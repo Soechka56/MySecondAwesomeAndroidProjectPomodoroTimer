@@ -3,5 +3,5 @@ plugins {
 }
 
 android {
-    namespace = "com.example.studysession"
+    namespace = "com.example.database.api"
 }
